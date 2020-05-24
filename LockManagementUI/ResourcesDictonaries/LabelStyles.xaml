@@ -1,0 +1,20 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:LockManagementUI.ResourcesDictonaries">
+
+    <Style TargetType="Label" x:Key="HeaderLabelStyle">
+        <Setter Property="Padding" Value="0" />
+        <Setter Property="FontSize" Value="34" />
+        <Setter Property="FontFamily" Value="/Assets/Sync FontIcons.ttf#Sync FontIcons" />
+        <Setter Property="Foreground" Value="White"></Setter>
+    </Style>
+
+    <Style TargetType="Label" x:Key="ComboboxLabelStyle">
+        <Setter Property="Padding" Value="0" />
+        <Setter Property="FontSize" Value="15" />
+        <Setter Property="FontFamily" Value="/Assets/Sync FontIcons.ttf#Sync FontIcons" />
+        <Setter Property="Foreground" Value="White"></Setter>
+    </Style>
+    
+
+</ResourceDictionary>

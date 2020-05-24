@@ -1,0 +1,7 @@
+npm command
+Squirrel --releasify AuximoLock.1.0.4.nupkg
+
+https://www.youtube.com/watch?v=W8Qu4qMJyh4
+
+Nuget Package Explorer
+Create Package
