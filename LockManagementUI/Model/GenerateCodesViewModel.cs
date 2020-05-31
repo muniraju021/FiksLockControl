@@ -12,10 +12,9 @@ using System.Linq;
 
 namespace LockManagementUI.Model
 {
-    public class GenerateCodesViewModel : NotificationObject
+    public class GenerateCodesViewModel : BaseViewModel
     {
         private readonly ILockActionServices _lockActionServices;
-        private readonly ICacheService _cacheService;
         
         public string RowCount { get; set; }
         public double ColumnCount => 2;
@@ -47,10 +46,9 @@ namespace LockManagementUI.Model
         }
 
 
-        public GenerateCodesViewModel(ILockActionServices lockActionServices, ICacheService cacheService)
+        public GenerateCodesViewModel(ILockActionServices lockActionServices, ICacheService cacheService) : base(cacheService)
         {
             _lockActionServices = lockActionServices;
-            _cacheService = cacheService;
             IsBusyIndicator = true;    
         }
                

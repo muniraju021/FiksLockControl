@@ -15,17 +15,16 @@ using System.Windows.Input;
 
 namespace LockManagementUI.Model
 {
-    public class DashboardViewModel : NotificationObject
+    public class DashboardViewModel : BaseViewModel
     {
         private ObservableCollection<LockInformationObject> _lstLockModels = new ObservableCollection<LockInformationObject>();
         private readonly ILockActionServices _lockActionServices;
-        private readonly ICacheService _cacheService;
         private readonly ILog _logger;
-               
+
         public string RowCount { get; set; }
 
         public double ColumnCount => 3;
-
+        
         private bool _isBusyIndicator;
         public bool IsBusyIndicator
         {
@@ -64,10 +63,9 @@ namespace LockManagementUI.Model
             }
         }
 
-        public DashboardViewModel(ILockActionServices lockActionServices, ICacheService cacheService, ILog logger)
+        public DashboardViewModel(ILockActionServices lockActionServices, ICacheService cacheService, ILog logger) : base(cacheService)
         {
             _lockActionServices = lockActionServices;
-            _cacheService = cacheService;
             IsBusyIndicator = true;
             _logger = logger;
         }
@@ -81,7 +79,6 @@ namespace LockManagementUI.Model
         {
             try
             {
-                
                 Task.Factory.StartNew(async () =>
                 {
                     while (true)
@@ -107,7 +104,7 @@ namespace LockManagementUI.Model
                 }, TaskCreationOptions.LongRunning);
 
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 _logger.Error($"DashboardViewModel: Exception in PopulateLockModels {ex}");
             }
@@ -115,9 +112,26 @@ namespace LockManagementUI.Model
             {
                 IsBusyIndicator = false;
             }
-                        
+
         }
-        
+
+        public void OpenLock(string code, string lockNo, ref ApiResponseMessage objApiRespMessage)
+        {
+            try
+            {
+                IsBusyIndicator = true;
+                _lockActionServices.OpenLock(code, lockNo, ref objApiRespMessage);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                IsBusyIndicator = false;
+            }
+        }
+
 
     }
 }

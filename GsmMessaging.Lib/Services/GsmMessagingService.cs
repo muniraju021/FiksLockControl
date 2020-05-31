@@ -45,6 +45,12 @@ namespace GsmMessaging.Lib.Services
             return _serialPortService.WriteToDevice<string>(message);
         }
 
+        public bool IsSmsConnectionActive()
+        {
+            if(_serialPortService != null)
+                return _serialPortService.IsSerialPortConnectionActive();
+            return false;
+        }
 
         public void Dispose()
         {

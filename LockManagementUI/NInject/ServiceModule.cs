@@ -35,6 +35,7 @@ namespace LockManagementUI.NInject
             Bind<IFiksApi>().To<FiksApiClient>().InSingletonScope();
             Bind<ICacheService>().To<CacheManagement>();
             Bind<IFtpService>().To<FtpService>();
+            Bind<IVersionCheck>().To<VersionCheck>();
         }
     }
 }

@@ -15,6 +15,7 @@ namespace LockServices.Lib.GsmMessages
     {
         void InitializeSerilaComm();
     }
+
     public class ReceiveSmsMessage : IReceiveSmsMessage
     {
         private readonly IGsmMessagingService _gsmMessagingService;
@@ -37,6 +38,7 @@ namespace LockServices.Lib.GsmMessages
             {
                 _logger.Info($"ReceiveSmsMessage: InitializeSerilaComm - Started..");
                 _gsmMessagingService.InitializeSerialConnection(ProcessSerialPortMessages);
+                _gsmMessagingService.SendMessage(_smsMessageService.GetSelectStorageCommand());
                 _gsmMessagingService.SendMessage(_smsMessageService.GetMessageAllCommand());
                 _logger.Info($"ReceiveSmsMessage: InitializeSerilaComm - Completed..");
             }
@@ -47,7 +49,7 @@ namespace LockServices.Lib.GsmMessages
             
         }
 
-        public void ProcessSerialPortMessages(string message)
+        public static void ProcessSerialPortMessages(string message)
         {
             try
             {

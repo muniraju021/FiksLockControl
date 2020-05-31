@@ -9,6 +9,7 @@ namespace GsmMessaging.Lib.Services
     public interface IGsmMessagingService : IDisposable
     {
         void InitializeSerialConnection(Action<string> processMsgReceiver = null);
-        bool SendMessage(string message);        
+        bool SendMessage(string message);
+        bool IsSmsConnectionActive();
     }
 }

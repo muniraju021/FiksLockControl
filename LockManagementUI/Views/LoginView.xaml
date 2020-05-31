@@ -15,9 +15,9 @@
         <Rectangle Height="280" VerticalAlignment="Top">
             <Rectangle.Fill>
                 <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-                    <GradientStop Color="#FF2281D1"/>
-                    <GradientStop Color="#FF34268A" Offset="1"/>
-                    <GradientStop Color="#FF33288B" Offset="0.546"/>
+                    <GradientStop Color="#2196F3"/>
+                    <GradientStop Color="#547FFE" Offset="1"/>
+                    <GradientStop Color="#2A55FF" Offset="0.546"/>
                 </LinearGradientBrush>
             </Rectangle.Fill>
         </Rectangle>
@@ -43,9 +43,16 @@
             </StackPanel>
         </Grid>
 
-        <Button Width="150" x:Name="BtnLogin" Click="BtnLogin_Click" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,65" Content="LOGIN"/>
+        <Button Width="150" x:Name="BtnLogin" Style="{StaticResource MaterialDesignRaisedAccentButton}"
+            materialDesign:ButtonAssist.CornerRadius="15" Click="BtnLogin_Click" HorizontalAlignment="Center" 
+                VerticalAlignment="Bottom" Margin="0,65" Content="LOGIN" Foreground="White">
+            <Button.Resources>
+                <SolidColorBrush x:Key="SecondaryAccentBrush" Color="#2AAAFF"/>
+                <SolidColorBrush x:Key="SecondaryAccentForegroundBrush" Color="#2A7FFF"/>
+            </Button.Resources>
+        </Button>
         <TextBlock Text="Forgot your Password?" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="30" Foreground="Gray" Cursor="Hand"/>
-        <Image Source="../Images/Home.png" Width="100" Height="100" VerticalAlignment="Top" Margin="30"/>
+        <Image Source="../Images/logo.png" Width="100" Height="100" VerticalAlignment="Top" Margin="40"/>
 
         <syncfusion:SfBusyIndicator x:Name="BusyIndicator" VerticalAlignment="Bottom" 
             HorizontalAlignment="Center" Margin="0,0,0,240" Width="60" Height="50"

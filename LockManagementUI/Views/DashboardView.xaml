@@ -86,13 +86,13 @@
                     <RowDefinition Height="auto"></RowDefinition>
                 </Grid.RowDefinitions>
 
-                <Rectangle Height="180" Width="249" Margin="22,15,15,15" Fill="White" RadiusY="10" RadiusX="10" >
+                <Rectangle Height="180" Width="245" Margin="22,15,15,15" Fill="White" RadiusY="10" RadiusX="10" >
                     <Rectangle.Effect>
                         <DropShadowEffect BlurRadius="20" Color="#FFDEDEDE" RenderingBias="Quality" ShadowDepth="1"/>
                     </Rectangle.Effect>
                 </Rectangle>
 
-                <Grid Margin="22,15,15,15" Height="180" Width="249" Grid.Row="0" >
+                <Grid Margin="22,15,15,15" Height="180" Width="245" Grid.Row="0" >
                     <Grid.RowDefinitions>
                         <RowDefinition Height="auto"></RowDefinition>
                         <RowDefinition Height="*"></RowDefinition>
@@ -150,20 +150,37 @@
                                     </StackPanel>
                                 </Button>-->
 
-                                <Button x:Name="btnGetLockHistory" Style="{StaticResource MaterialDesignRaisedAccentButton}"
-                                    materialDesign:ButtonAssist.CornerRadius="15" Click="btnGetLockHistory_Click"
-                                        HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,5,5,0" 
-                                    ToolTip="Lock History">
-                                    <Button.Resources>
-                                        <SolidColorBrush x:Key="SecondaryAccentBrush" Color="#F44336"/>
-                                        <SolidColorBrush x:Key="SecondaryAccentForegroundBrush" Color="#E57373"/>
-                                    </Button.Resources>
-                                    <StackPanel Orientation="Horizontal">
-                                        <materialDesign:PackIcon Kind="History" VerticalAlignment="Center" Margin="0,0,3,0" Foreground="White"/>
-                                        <TextBlock Text="History" FontFamily="Champagne &amp; Limousines" Foreground="White"/>
-                                    </StackPanel>
-                                </Button>
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                    <Button x:Name="btnOpenLock" Style="{StaticResource MaterialDesignRaisedAccentButton}"
+                                    materialDesign:ButtonAssist.CornerRadius="15" Click="btnOpenLock_Click"
+                                        HorizontalAlignment="Left"  Margin="0,5,10,0" Width="100"
+                                    ToolTip="Sends SMS to Open Lock">
+                                        <Button.Resources>
+                                            <SolidColorBrush x:Key="SecondaryAccentBrush" Color="#2AAAFF"/>
+                                            <SolidColorBrush x:Key="SecondaryAccentForegroundBrush" Color="#2A7FFF"/>
+                                        </Button.Resources>
+                                        <StackPanel Orientation="Horizontal" Margin="-9,0,-9,0"  >
+                                            <materialDesign:PackIcon Kind="lock" Width="15" Height="15" VerticalAlignment="Center" Margin="0,0,3,0" 
+                                                                     Foreground="White"/>
+                                            <TextBlock HorizontalAlignment="Center" Text="Open Lock" 
+                                                   FontFamily="Champagne &amp; Limousines" Foreground="White" FontSize="14"/>
+                                        </StackPanel>
+                                    </Button>
 
+                                    <Button x:Name="btnGetLockHistory" Style="{StaticResource MaterialDesignRaisedAccentButton}"
+                                    materialDesign:ButtonAssist.CornerRadius="15" Click="btnGetLockHistory_Click"
+                                        HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,5,5,0" Width="100"
+                                    ToolTip="Lock History">
+                                        <Button.Resources>
+                                            <SolidColorBrush x:Key="SecondaryAccentBrush" Color="#2AAAFF"/>
+                                            <SolidColorBrush x:Key="SecondaryAccentForegroundBrush" Color="#2A7FFF"/>
+                                        </Button.Resources>
+                                        <StackPanel Orientation="Horizontal">
+                                            <materialDesign:PackIcon Kind="History" VerticalAlignment="Center" Margin="0,0,3,0" Foreground="White"/>
+                                            <TextBlock Text="History" FontFamily="Champagne &amp; Limousines" Foreground="White"/>
+                                        </StackPanel>
+                                    </Button>
+                                </StackPanel>
                             </Grid>
                         </StackPanel>
                     </Grid>

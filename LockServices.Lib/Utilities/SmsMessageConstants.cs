@@ -18,6 +18,8 @@ namespace LockServices.Lib.Utilities
         public static readonly string ReceiveActualMsgAllAlert = "+CMGL";
 
         public static readonly string DeleteMsgAtIndex = "AT+CMGD={0},0" + CR;
+
+        public static readonly string SelectStorageCommand = "AT+CPMS=\"MT\"";
     }
     
 }

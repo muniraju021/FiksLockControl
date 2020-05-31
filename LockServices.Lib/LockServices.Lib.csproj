@@ -65,7 +65,9 @@
     <Compile Include="Services\FtpService.cs" />
     <Compile Include="Services\IFtpService.cs" />
     <Compile Include="Services\ILockActionServices.cs" />
+    <Compile Include="Services\IVersionCheck.cs" />
     <Compile Include="Services\LockActionServices.cs" />
+    <Compile Include="Services\VersionCheck.cs" />
     <Compile Include="Utilities\CustomDateConverter.cs" />
     <Compile Include="Utilities\SmsMessageConstants.cs" />
     <Compile Include="WebClientApi\FiksApiClient.cs" />

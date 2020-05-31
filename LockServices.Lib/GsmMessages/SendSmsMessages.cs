@@ -33,7 +33,7 @@ namespace LockServices.Lib.GsmMessages
         private char CR = (char)13;
 
         public static ConcurrentQueue<string> ReceivedMessages = new ConcurrentQueue<string>();
-        private static long _gsmMessageReceiveTimeoutInMs = 60000;
+        private static long _gsmMessageReceiveTimeoutInMs = 20000;
         private readonly ILog _logger;
 
         public SendSmsMessages(IGsmMessagingService gsmMessagingService,ILog logger)
@@ -51,6 +51,12 @@ namespace LockServices.Lib.GsmMessages
         
         private void SendLockCodeMessage(ref ApiResponseMessage obApiResponseMsg)
         {
+            if(_gsmMessagingService.IsSmsConnectionActive())
+            {
+                _logger.Warn($"SendSmsMessages: SendLockCodeMessage - Initalizing SerialPort Connection");
+                _gsmMessagingService.InitializeSerialConnection(ReceiveSmsMessage.ProcessSerialPortMessages);
+            }
+
             foreach (var cmd in _lstCommands)
             {
                 if(!cmd.Key.Contains("{1}"))

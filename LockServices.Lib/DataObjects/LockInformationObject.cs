@@ -36,7 +36,8 @@ namespace LockServices.Lib.DataObjects
 
         [JsonProperty("lockEndDate")]
         //[JsonConverter(typeof(CustomDateConverter))]
-        public DateTime? LockEndDate { get; set; }
+        //public DateTime? LockEndDate { get; set; }
+        public string LockEndDate { get; set; }
 
         [JsonProperty("lockPhNo")]
         public string LockPhNo { get; set; }

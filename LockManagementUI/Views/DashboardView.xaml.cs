@@ -48,6 +48,31 @@ namespace LockManagementUI.Views
 
         }
 
+        private void btnOpenLock_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                var btn = e.Source as Button;
+                var obj = btn.DataContext as LockInformationObject;
+                var objApiResponse = new ApiResponseMessage();
+                _viewModel.OpenLock(obj.LatestLockCode, obj.LockPhNo, ref objApiResponse);
+                if (string.IsNullOrEmpty(objApiResponse.ErrorMessage))
+                {
+                    var lockStatus = "SMS Sent Status: SENT";
+                    MessageBox.Show(lockStatus, "Status", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+                else
+                {
+                    var lockStatus = objApiResponse.ErrorMessage;
+                    MessageBox.Show(lockStatus, "Status", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error - {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             _viewModel.IsDialogOpen = true;

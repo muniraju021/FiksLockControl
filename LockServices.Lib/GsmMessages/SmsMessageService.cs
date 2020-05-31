@@ -15,13 +15,14 @@ namespace LockServices.Lib.GsmMessages
     {
         //Read Sms Messages
         string GetMessageAtIndexCommand(string index);
+        //Get All Message From Inbox
         string GetMessageAllCommand();
-
         //Delete Sms Messages
         string DeleteMsgAtIndexCommand(string index);
-
         //Processing
         void ProcessReceivedMessages();
+        //Select Storage Command
+        string GetSelectStorageCommand();
     }
     public class SmsMessageService : ISmsMessageService
     {
@@ -51,9 +52,20 @@ namespace LockServices.Lib.GsmMessages
         {
             return string.Format(SmsMessageConstants.DeleteMsgAtIndex, index);
         }
-        
+
+        public string GetSelectStorageCommand()
+        {
+            return string.Format(SmsMessageConstants.SelectStorageCommand);
+        }
+
         public void ProcessReceivedMessages()
         {
+            if (_gsmMessagingService.IsSmsConnectionActive())
+            {
+                _logger.Warn($"SendSmsMessages: SendLockCodeMessage - Initalizing SerialPort Connection");
+                _gsmMessagingService.InitializeSerialConnection(ReceiveSmsMessage.ProcessSerialPortMessages);
+            }
+
             Task.Factory.StartNew(() =>
             {
                 List<string> partialMsg = new List<string>();
@@ -132,5 +144,7 @@ namespace LockServices.Lib.GsmMessages
                 }
             }
         }
+
+        
     }
 }

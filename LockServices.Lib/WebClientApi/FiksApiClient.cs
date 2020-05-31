@@ -10,6 +10,7 @@ using Newtonsoft.Json.Linq;
 using log4net;
 using System.Configuration;
 using LockServices.Lib.Cache;
+using System.IO;
 
 namespace LockServices.Lib.WebClientApi
 {
@@ -195,6 +196,58 @@ namespace LockServices.Lib.WebClientApi
             _logger.Error($"FiksApiClient: UpdateLockStatus - emailId:{emailId} - lockId:{lockId} - status:{status} - Error:{error}");
 
             return default(string);
+        }
+
+        public async Task<string> GetAppVersion()
+        {
+            _logger.InfoFormat($"FiksApiClient: GetAppVersion");
+
+            var userDetails = _cachService.GetUserCredentials();
+
+            if (userDetails == null)
+            {
+                _logger.Error($"FiksApiClient: GetAppVersion - Session Expired");
+                throw new Exception("Session Expired");
+            }
+            _httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", userDetails.JwtToken);
+            var response = await _httpClient.GetAsync($@"api/v1/{userDetails.EmailId}/0.0.0.0/checkDesktopAppVersion");
+            if (response.IsSuccessStatusCode)
+            {
+                var jObject = await response.Content.ReadAsAsync<JObject>();
+                var message = jObject.SelectToken("message", true).ToString();
+
+                _logger.Info($"FiksApiClient: GetAppVersion - Result:{message}");
+                               
+                return message;
+            }
+                      
+            return default(string);
+        }
+
+        public async Task DownloadLatestAppVersion(string version,string downloadPath)
+        {
+            _logger.InfoFormat($"FiksApiClient: DownloadLatestAppVersion Started");
+
+            var userDetails = _cachService.GetUserCredentials();
+
+            if (userDetails == null)
+            {
+                _logger.Error($"FiksApiClient: DownloadLatestAppVersion - Session Expired");
+                throw new Exception("Session Expired");
+            }
+            _httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", userDetails.JwtToken);
+            var response = await _httpClient.GetAsync($@"api/v1/admin/{version}/download");
+            if (response.IsSuccessStatusCode)
+            {
+                using (var fs = new FileStream(downloadPath, FileMode.CreateNew))
+                {
+                    await response.Content.CopyToAsync(fs);
+
+                    _logger.InfoFormat($"FiksApiClient: DownloadLatestAppVersion Finished - {downloadPath}");
+
+                }
+
+            }
         }
     }
 }

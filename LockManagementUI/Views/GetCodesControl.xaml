@@ -14,7 +14,7 @@
     <!--<UserControl.DataContext>
         <model:GenerateCodesViewModel></model:GenerateCodesViewModel>
     </UserControl.DataContext>-->
-    <UserControl.Resources>        
+    <UserControl.Resources>
         <Style TargetType="ListBox">
             <Setter Property="ItemsPanel">
                 <Setter.Value>
@@ -30,10 +30,10 @@
                         <Setter Property="Control.Template" Value="{x:Null}"/>
                     </Style>
                 </Setter.Value>
-            </Setter>            
+            </Setter>
         </Style>
 
-        <Style TargetType="ListBoxItem">            
+        <Style TargetType="ListBoxItem">
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="ListBoxItem">
@@ -89,13 +89,13 @@
                     <RowDefinition Height="auto"></RowDefinition>
                 </Grid.RowDefinitions>
 
-                <Rectangle Height="150" Width="225" Margin="22,15,15,15" Fill="White" RadiusY="10" RadiusX="10" >
+                <Rectangle Height="150" Width="222" Margin="22,15,15,15" Fill="White" RadiusY="10" RadiusX="10" >
                     <Rectangle.Effect>
                         <DropShadowEffect BlurRadius="20" Color="#FFDEDEDE" RenderingBias="Quality" ShadowDepth="1"/>
                     </Rectangle.Effect>
                 </Rectangle>
 
-                <Grid Margin="22,15,15,15" Height="150" Width="225" Grid.Row="0" >
+                <Grid Margin="22,15,15,15" Height="150" Width="222" Grid.Row="0" >
                     <Grid.RowDefinitions>
                         <RowDefinition Height="*"></RowDefinition>
                     </Grid.RowDefinitions>
@@ -140,6 +140,10 @@
                                     materialDesign:ButtonAssist.CornerRadius="15" Click="GenerateButton_Click"
                                         HorizontalAlignment="Left"  Margin="0,0,5,0" Width="100"
                                     ToolTip="Generate Lock Code">
+                                    <Button.Resources>
+                                        <SolidColorBrush x:Key="SecondaryAccentBrush" Color="#2AAAFF"/>
+                                        <SolidColorBrush x:Key="SecondaryAccentForegroundBrush" Color="#2A7FFF"/>
+                                    </Button.Resources>
                                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="-9,0,-9,0" >
                                         <materialDesign:PackIcon Kind="ClipboardListOutline" Width="15" Height="15" VerticalAlignment="Center" Margin="0,0,3,0" Foreground="White"/>
                                         <TextBlock HorizontalAlignment="Center" Text="Get Code" 
@@ -150,6 +154,10 @@
                                     materialDesign:ButtonAssist.CornerRadius="15" Click="btnOpenLock_Click"
                                         HorizontalAlignment="Left"  Margin="0,0,5,0" Width="100"
                                     ToolTip="Sends SMS to Open Lock">
+                                    <Button.Resources>
+                                        <SolidColorBrush x:Key="SecondaryAccentBrush" Color="#2AAAFF"/>
+                                        <SolidColorBrush x:Key="SecondaryAccentForegroundBrush" Color="#2A7FFF"/>
+                                    </Button.Resources>
                                     <StackPanel Orientation="Horizontal" Margin="-9,0,-9,0"  >
                                         <materialDesign:PackIcon Kind="lock" Width="15" Height="15" VerticalAlignment="Center" Margin="0,0,3,0" Foreground="White"/>
                                         <TextBlock HorizontalAlignment="Center" Text="Open Lock" 
@@ -158,45 +166,47 @@
                                 </Button>
                             </StackPanel>
                         </StackPanel>
-                        
-                    </Grid>                   
+
+                    </Grid>
                 </Grid>
             </Grid>
         </DataTemplate>
-        
+
     </UserControl.Resources>
     <Grid>
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"></RowDefinition>
                 <RowDefinition Height="9*"></RowDefinition>
-                <RowDefinition Height="*"></RowDefinition>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
             <Border BorderBrush="Black" BorderThickness="0" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2">
-                <Grid  VerticalAlignment="Center">
-                    <StackPanel Orientation="Horizontal"  Background="#00FFD4">
-                        <materialDesign:PackIcon Kind="InformationVariant" Height="25" Width="25" Margin="10" Foreground="White" Background="#31577E"/>
-                        <TextBlock Text="Generate Codes" Style="{StaticResource LabelTextBlockStyle}" VerticalAlignment="Center" HorizontalAlignment="Center">
-                        </TextBlock>
-                    </StackPanel>
+                <Grid VerticalAlignment="Center">
+                    <Border BorderBrush="#54FED4" BorderThickness="1" CornerRadius="5">
+                        <StackPanel Orientation="Horizontal" Background="#54FED4"  >
+                            <materialDesign:PackIcon Kind="InformationVariant" Height="25" Width="25" Margin="10" Foreground="White" Background="#31577E"/>
+                            <TextBlock Text="Generate Codes" Style="{StaticResource LabelTextBlockStyle}" VerticalAlignment="Center" Foreground="Gray" HorizontalAlignment="Center">
+                            </TextBlock>
+                        </StackPanel>
+                    </Border>
                 </Grid>
             </Border>
-            <Border BorderBrush="Black" BorderThickness="0" Margin="0,5,0,0" Grid.Row="1" Grid.Column="0">
-                <Grid Background="#00FFD4">
-                    <ListBox ItemsSource="{Binding ListLockInfoColl}"
-                         ItemTemplate="{StaticResource ListboxTemplate}" 
-                         ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                         ScrollViewer.VerticalScrollBarVisibility="Auto"    
-                         x:Name="lstLockDashboard" Background="#00FFD4"
-                         >
-                    </ListBox>
-
+            <Border BorderBrush="Black" BorderThickness="0" CornerRadius="20" Margin="0,5,0,0" Grid.Row="1" Grid.Column="0">
+                <Grid >
+                    <Border BorderBrush="#54FED4" BorderThickness="1" CornerRadius="5">                        
+                            <ListBox ItemsSource="{Binding ListLockInfoColl}" BorderBrush="Transparent" BorderThickness="0"
+                                 ItemTemplate="{StaticResource ListboxTemplate}" 
+                                 ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                 ScrollViewer.VerticalScrollBarVisibility="Auto"    
+                                 x:Name="lstLockDashboard" Background="#54FED4"
+                                >
+                            </ListBox>
+                    </Border>
                 </Grid>
             </Border>
-            <Border BorderBrush="Black" BorderThickness="0" Margin="0,5,0,0" Grid.Row="2" Grid.Column="1">
+            <!--<Border BorderBrush="Black" BorderThickness="0" Margin="0,5,0,0" Grid.Row="2" Grid.Column="1">
                 <Grid Background="#00FFD4">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="*"></RowDefinition>
@@ -207,8 +217,8 @@
 
                     </StackPanel>
                 </Grid>
-            </Border>
-        </Grid>        
+            </Border>-->
+        </Grid>
 
         <syncfusion:SfBusyIndicator x:Name="BusyIndicator" VerticalAlignment="Bottom" 
            HorizontalAlignment="Center" Margin="0,0,0,350" Width="60" Height="50"

@@ -11,6 +11,7 @@
         xmlns:views ="clr-namespace:LockManagementUI.Views"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         syncfusionskin:SfSkinManager.VisualStyle="Metro"  SnapsToDevicePixels="True" 
+        Icon="Images/icon.ico"
         ResizeMode="NoResize" WindowStartupLocation="CenterScreen" WindowStyle="None"
         DataContext="{Binding Path=ObjApplicationViewModel, Source={StaticResource ServiceLocator}}"
         Title="Auximo Lock" Height="700" Width="1090" >
@@ -103,7 +104,7 @@
             <Grid x:Name="GridMenu" Grid.Column="0" Grid.Row="1" Grid.RowSpan="2" Background="#D4FFFF">
                 <StackPanel>
                     <Border BorderBrush="#FFCFCFCF" BorderThickness="0">
-                        <Grid Height="150" RenderTransformOrigin="0.5,0.5">                            
+                        <Grid Height="150" RenderTransformOrigin="0.5,0.5">
                             <StackPanel Orientation="Vertical">
                                 <Border Width="75" Height="75" CornerRadius="80" BorderBrush="Gray" BorderThickness="1" Margin="0,20,0,0">
                                     <StackPanel Grid.Row="0" Orientation="Vertical" HorizontalAlignment="Center" Margin="0,10,0,0" >
@@ -113,7 +114,6 @@
                                 <TextBlock Grid.Row="1" Text="{Binding UserEmail}" Style="{StaticResource UserNameTextBlockStyle}" 
                                 FontSize="15" HorizontalAlignment="Center" Margin="0,10,0,0"></TextBlock>
                             </StackPanel>
-
                         </Grid>
                     </Border>
 
@@ -156,7 +156,7 @@
             </DockPanel>
 
         </Grid>
-    </Border>    
-    
+    </Border>
+
 </Window>
 

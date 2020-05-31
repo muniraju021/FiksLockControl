@@ -21,5 +21,9 @@ namespace LockServices.Lib.WebClientApi
 
         Task<string> UpdateLockStatus(string emailId, string lockId, string status);
 
+        Task<string> GetAppVersion();
+
+        Task DownloadLatestAppVersion(string version, string downloadPath);
+
     }
 }

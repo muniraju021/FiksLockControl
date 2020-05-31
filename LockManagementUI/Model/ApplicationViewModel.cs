@@ -11,38 +11,21 @@ using System.Threading.Tasks;
 
 namespace LockManagementUI.Model
 {
-    public class ApplicationViewModel : NotificationObject
+    public class ApplicationViewModel : BaseViewModel
     {
         IKernel _kernel;
         IReceiveSmsMessage _receiveSmsMessage;
-        ICacheService _cacheService;
-
-        private string _userEmail;
-        public string UserEmail
-        {
-            get { return _userEmail; }
-            set
-            {
-                _userEmail = value;
-                RaisePropertyChanged("UserEmail");
-            }
-        }
-        public ApplicationViewModel(IKernel kernel, IReceiveSmsMessage recieveSmsMsg, ICacheService cacheService)
+                
+        public ApplicationViewModel(IKernel kernel, IReceiveSmsMessage recieveSmsMsg, ICacheService cacheService) : base(cacheService)
         {
             _kernel = kernel;
             _receiveSmsMessage = recieveSmsMsg;
-            _cacheService = cacheService;
-            PopulateUserEmail();
             //UserEmail = "muniraju021@gmail.com";
         }
 
         public IKernel Kernel { get { return _kernel; } }
 
-        private void PopulateUserEmail()
-        {
-            var userInfo = _cacheService.GetUserCredentials();
-            UserEmail = userInfo?.EmailId;
-        }
+        
 
     }
 }
