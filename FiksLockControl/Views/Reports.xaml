@@ -1,0 +1,118 @@
+﻿<UserControl x:Class="FiksLockControl.Views.Reports"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
+             xmlns:syncfusionskin ="clr-namespace:Syncfusion.SfSkinManager;assembly=Syncfusion.SfSkinManager.WPF"
+             xmlns:local="clr-namespace:FiksLockControl.Views"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             mc:Ignorable="d" 
+             DataContext="{Binding Path=ObjReportViewModel, Source={StaticResource ServiceLocator}}"
+             d:DesignHeight="730" d:DesignWidth="1060" Margin="10">
+
+    <UserControl.Resources>
+        <Style TargetType="syncfusion:GridHeaderCellControl" x:Key="headerStyle">
+            <Setter Property="FontWeight" Value="Light"/>
+            <Setter Property="Height" Value="50"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Background" Value="#F64E51"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontFamily" Value="Champagne &amp; Limousines"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+        </Style>
+        <Style TargetType="syncfusion:GridCell" x:Key="CellStyle">
+            <Setter Property="FontSize" Value="12"/>
+            <!--<Setter Property="Height" Value="50"/>-->
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="FontFamily" Value="Champagne &amp; Limousines"/>
+            <Setter Property="Foreground" Value="Black"/>
+        </Style>
+
+        <Style TargetType="syncfusion:VirtualizingCellsControl" x:Key="alternatingRowStyle">
+            <Setter Property="Background" Value="LightBlue"/>
+        </Style>
+
+        <Style TargetType="syncfusion:VirtualizingCellsControl" x:Key="RowStyle">
+            <Setter Property="Background" Value="White"/>
+        </Style>
+
+        <Style x:Key="MessageTextBlockStyle" TargetType="{x:Type TextBlock}">
+            <Setter Property="FontFamily" Value="Champagne &amp; Limousines"/>
+            <Setter Property="Foreground" Value="Black"/>
+        </Style>
+
+        <Style x:Key="ComboboxStyle" TargetType="{x:Type ComboBox}">
+            <Setter Property="FontFamily" Value="Champagne &amp; Limousines"/>
+            <Setter Property="Foreground" Value="Black"/>
+            <Setter Property="FontSize" Value="15"/>
+        </Style>
+    </UserControl.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="8*"></RowDefinition>
+        </Grid.RowDefinitions>
+
+        <Border BorderBrush="#54FED4" BorderThickness="0" CornerRadius="5" Grid.Row="0" Grid.Column="0">
+            <Grid Margin="0,0,0,5" Grid.Row="0">
+                <Border BorderBrush="#54FED4" BorderThickness="1" CornerRadius="5">
+                    <StackPanel Background="#54FED4" Orientation="Horizontal">
+                        <TextBlock Style="{StaticResource MessageTextBlockStyle}" Margin="10" FontSize="24" VerticalAlignment="Center">Vehicle No:</TextBlock>
+                        <ComboBox Margin="15 0 0 0"  Width="200" Height="40" FontFamily="Champagne &amp; Limousines" Foreground="Black" FontSize="15"
+                                  ItemsSource="{Binding LstVehicleNo}" 
+                                  SelectedItem="{Binding SelectedVehNo, Mode=TwoWay}">
+                        </ComboBox>
+                        <Button Width="120" Margin="20 0 0 0" x:Name="btnGenerateReport" Click="btnGenerateReport_Click"
+                            Style="{StaticResource MaterialDesignRaisedAccentButton}"
+                                materialDesign:ButtonAssist.CornerRadius="15" HorizontalAlignment="Center" 
+                            VerticalAlignment="Center">
+                            <Button.Resources>
+                                <SolidColorBrush x:Key="SecondaryAccentBrush" Color="#2AAAFF"/>
+                                <SolidColorBrush x:Key="SecondaryAccentForegroundBrush" Color="#2A7FFF"/>
+                            </Button.Resources>
+                            <StackPanel Orientation="Horizontal">
+                                <materialDesign:PackIcon Kind="Report" VerticalAlignment="Center" Width="15" Height="15" Margin="0,0,3,0" Foreground="White"/>
+                                <TextBlock HorizontalAlignment="Center" Text="Generate" 
+                            FontFamily="Champagne &amp; Limousines" Foreground="White" FontSize="12"/>
+                            </StackPanel>
+                        </Button>
+                    </StackPanel>
+                </Border>
+            </Grid>
+        </Border>
+
+        <Grid Margin="0,5,0,0" Height="580" Grid.Row="1" VerticalAlignment="Top">
+            <Border BorderBrush="#54FED4" BorderThickness="1" CornerRadius="5">
+                <StackPanel Background="#54FED4">
+                    <syncfusion:SfDataGrid x:Name="datagrid" Margin="10"     
+                               AlternatingRowStyle="{StaticResource alternatingRowStyle}"
+                               RowStyle="{StaticResource RowStyle}"
+                               HeaderStyle="{StaticResource headerStyle}"
+                               CellStyle="{StaticResource CellStyle}"
+                               AllowDraggingColumns="True"                                   
+                               AutoGenerateColumns="False"
+                               AllowSorting="True"
+                               AllowFiltering="True"
+                               ColumnSizer="Star"       
+                               ScrollViewer.VerticalScrollBarVisibility="Auto"
+                               ItemsSource="{Binding ElementName=dataPager,Path=PagedSource}">
+                        <syncfusion:SfDataGrid.Columns>
+                            <syncfusion:GridTextColumn MappingName="LockStatus" HeaderText="Lock Status" />
+                            <syncfusion:GridDateTimeColumn MappingName="LastUpdatedTime" AllowNullValue="True"
+                                    Pattern="CustomPattern"  CustomPattern="dd-MMM-yyyy hh:mm:ss" HeaderText="Update Time" >
+                            </syncfusion:GridDateTimeColumn>
+                        </syncfusion:SfDataGrid.Columns>
+                    </syncfusion:SfDataGrid>
+
+                    <syncfusion:SfDataPager x:Name="dataPager"
+                                    Grid.Row="1"
+                                    PageSize="20"
+                            Source="{Binding LockHistoryDetails}"/>
+
+                </StackPanel>
+            </Border>
+        </Grid>
+    </Grid>
+</UserControl>

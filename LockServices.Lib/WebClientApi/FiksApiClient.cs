@@ -149,7 +149,7 @@ namespace LockServices.Lib.WebClientApi
             if (response.IsSuccessStatusCode)
             {
                 var jObject = await response.Content.ReadAsAsync<JObject>();
-                var message = jObject.SelectToken("$..overallStatus", true).ToString();
+                var message = jObject.SelectToken("$..overallStatus", true)?.ToString();
 
                 _logger.Info($"FiksApiClient: GetLockHistory - emailId:{emailId} - vehicleNo:{vehicleNo} - Result:{message}");
 

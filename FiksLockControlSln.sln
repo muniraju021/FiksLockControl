@@ -5,7 +5,7 @@ VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GsmMessaging.Lib", "GsmMessaging.Lib\GsmMessaging.Lib.csproj", "{6D468E9B-1A08-494D-A5D8-E250565E6778}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LockManagementUI", "LockManagementUI\LockManagementUI.csproj", "{0786C7DE-F33A-48B5-A849-35E05F2B12A1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FiksLockControl", "FiksLockControl\FiksLockControl.csproj", "{0786C7DE-F33A-48B5-A849-35E05F2B12A1}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LockServices.Lib", "LockServices.Lib\LockServices.Lib.csproj", "{DEF5728A-F1B3-430B-861F-0ED14DD2E302}"
 EndProject

@@ -1,0 +1,96 @@
+﻿<UserControl x:Class="LockManagementUI.Views.VehicleDashboard"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:LockManagementUI.Views"
+             xmlns:model ="clr-namespace:LockManagementUI.Model"
+             mc:Ignorable="d" 
+             DataContext="{Binding Path=ObjDashboardViewModel, Source={StaticResource ServiceLocator}}"
+             xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
+             syncfusion:SkinStorage.VisualStyle="Metro"
+             d:DesignHeight="730" d:DesignWidth="1060">
+    <!--<UserControl.DataContext>
+        <model:DashboardViewModel></model:DashboardViewModel>
+    </UserControl.DataContext>-->
+    <UserControl.Resources>
+        <Style x:Key="TextBlockBorder" TargetType="{x:Type Border}">
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="BorderBrush" Value="Black" />
+            <Setter Property="CornerRadius" Value="5"/>
+            <Setter Property="Background" Value="#5B87B7"/>
+            <Setter Property="Width" Value="120"/>
+        </Style>
+        <Style x:Key="Tileviewstyle"  TargetType="{x:Type syncfusion:TileViewItem}">
+            <Setter Property="HeaderBackground" Value="#CDCDCD"></Setter>
+            <Setter Property="HeaderHeight" Value="50"/>
+            <Setter Property="BorderBrush" Value="Black"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Margin" Value="2"/>
+            <!-- Scroll bar settings -->
+            <Setter Property="OnMinimizedHeight" Value="150"/>
+            <Setter Property="OnMinimizedWidth" Value="300"/>
+            <!--<Setter Property="CornerRadius" Value="5"/>-->
+        </Style>
+        <DataTemplate x:Key="NormalTemplate">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"></RowDefinition>
+                    <RowDefinition Height="auto"></RowDefinition>
+                </Grid.RowDefinitions>
+                
+                <!--<Image Source="{Binding Path=BookID, Converter={StaticResource imageconv}}" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5"/>-->
+
+                <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="10">
+                    <Border Style="{StaticResource TextBlockBorder}" Margin="0,10,0,5">
+                        <TextBlock Text="{Binding LatestLockCode}" Style="{StaticResource DashboardTextBlockH1Content}" Grid.Column="0" TextAlignment="Center"/>
+                    </Border>
+                    <TextBlock Text="Last Code Generated" Style="{StaticResource DashboardTextBlockContent}" VerticalAlignment="Bottom"></TextBlock>
+                </StackPanel>
+                
+                <StackPanel Grid.Row="1" Grid.Column="0" Margin="5" >
+                    <TextBlock Text="Lock Status" Style="{StaticResource DashboardTextBlockContent}" ></TextBlock>
+                    <Separator Margin="5,5,0,0"></Separator>
+                    <TextBlock Text="{Binding LatestLastUpdatedTime}" Style="{StaticResource DashboardTextBlockContent}">
+                    </TextBlock>
+                    <Separator Margin="5,5,0,0"></Separator>
+                </StackPanel>
+
+            </Grid>
+        </DataTemplate>
+        <DataTemplate x:Key="LockHeaderTemplate">
+            <Grid Visibility="Hidden">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition></RowDefinition>
+                </Grid.RowDefinitions>
+                <StackPanel Grid.Row="0" Grid.Column="0" VerticalAlignment="Center">
+                    <TextBlock Text="{Binding VehicleNumber}" 
+                           Style="{StaticResource DashboardTextBlockHeaderContent}" Margin="20,0,0,0" />
+                </StackPanel>                
+            </Grid>
+        </DataTemplate>
+    </UserControl.Resources>
+    <Grid>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+
+        <syncfusion:TileViewControl Grid.Column="0" Grid.Row="0" 
+                                    Margin="3, 9, 7, 5"  x:Name="TileView"
+                                    ItemContainerStyle="{StaticResource Tileviewstyle}"
+            ItemsSource="{Binding LstLockModels}"
+            ItemTemplate="{StaticResource NormalTemplate}"    
+            HeaderTemplate="{StaticResource LockHeaderTemplate}"
+            RowCount="{Binding RowCount}"
+            ColumnCount="{Binding ColumnCount}"
+            SelectedIndex="0" VerticalScrollBarVisibility="Auto"  >
+        </syncfusion:TileViewControl>
+    </Grid>
+</UserControl>
