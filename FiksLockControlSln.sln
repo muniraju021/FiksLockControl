@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FiksLockControl", "FiksLock
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LockServices.Lib", "LockServices.Lib\LockServices.Lib.csproj", "{DEF5728A-F1B3-430B-861F-0ED14DD2E302}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleAppln", "ConsoleAppln\ConsoleAppln.csproj", "{5311630C-8701-4697-833B-508A5B626E72}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{DEF5728A-F1B3-430B-861F-0ED14DD2E302}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DEF5728A-F1B3-430B-861F-0ED14DD2E302}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DEF5728A-F1B3-430B-861F-0ED14DD2E302}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5311630C-8701-4697-833B-508A5B626E72}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5311630C-8701-4697-833B-508A5B626E72}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5311630C-8701-4697-833B-508A5B626E72}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5311630C-8701-4697-833B-508A5B626E72}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

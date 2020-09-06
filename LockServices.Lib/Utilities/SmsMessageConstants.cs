@@ -15,6 +15,7 @@ namespace LockServices.Lib.Utilities
 
         public static readonly string ReceiveMsgAlert = "+CMTI: \"SM\",";
         public static readonly string ReceiveActualMsgAlert = "+CMGR";
+        public static readonly string ReceiveActualMsgAlert01 = "+CMT";
         public static readonly string ReceiveActualMsgAllAlert = "+CMGL";
 
         public static readonly string DeleteMsgAtIndex = "AT+CMGD={0},0" + CR;

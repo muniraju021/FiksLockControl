@@ -31,13 +31,13 @@ namespace LockServices.Lib.Services
 
         public async Task<List<LockInformationObject>> GetLockDetailsByEmailId(string emailId)
         {
-            _logger.InfoFormat($"LockActionServices: GetLockDetailsByEmailId - emailId:{emailId}");
+            _logger.InfoFormat($"LockActionServices: GetLockDetailsByEmailId - emailId:{emailId} - Started");
             var lstLockInfo = await _iFiksApi.GetLockDetails(emailId);
             if(lstLockInfo != null && lstLockInfo.Count > 0)
             {
                 _iCacheService.LoadLockInfoDetails(lstLockInfo);
             }
-            _logger.InfoFormat($"LockActionServices: GetLockDetailsByEmailId - emailId:{emailId} - Result:{lstLockInfo.Count}");
+            _logger.InfoFormat($"LockActionServices: GetLockDetailsByEmailId - emailId:{emailId} - Finished: Result:{lstLockInfo.Count}");
             return lstLockInfo;
         }
 

@@ -29,7 +29,7 @@ namespace LockServices.Lib.GsmMessages
             _gsmMessagingService = gsmMessagingService;
             _logger = logger;
             _smsMessageService = smsMsgService;
-            InitializeSerilaComm();
+            InitializeSerilaComm(); 
         }
 
         public void InitializeSerilaComm()

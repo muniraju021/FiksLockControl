@@ -27,30 +27,34 @@ namespace FiksLockControl
     public partial class MainPage : Window
     {
         ApplicationViewModel _applicationViewModel;
+        DashboardViewModel _dashboardViewModel;
 
         public MainPage()
         {
             InitializeComponent();
             _applicationViewModel = DataContext as ApplicationViewModel;
         }
-        
+
         private void DashboardBtn_Click(object sender, RoutedEventArgs e)
         {
             //DataContext = new DashboardViewModel();
         }
-              
+
         private void ListViewMenu_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             switch (((ListViewItem)((ListView)sender).SelectedItem).Name)
             {
                 case "Dashboard":
-                    DataContext = new DashboardViewModel(_applicationViewModel.Kernel.Get<ILockActionServices>(),_applicationViewModel.Kernel.Get<ICacheService>(),_applicationViewModel.Kernel.Get<ILog>());
+                    _dashboardViewModel = new DashboardViewModel(_applicationViewModel.Kernel.Get<ILockActionServices>(), _applicationViewModel.Kernel.Get<ICacheService>(), _applicationViewModel.Kernel.Get<ILog>());
+                    DataContext = _dashboardViewModel;
                     break;
                 case "GetCodes":
+                    _dashboardViewModel?.Dispose();
                     DataContext = new GenerateCodesViewModel(_applicationViewModel.Kernel.Get<ILockActionServices>(), _applicationViewModel.Kernel.Get<ICacheService>());
                     break;
                 case "Reports":
-                    DataContext = new ReportViewModel(_applicationViewModel.Kernel.Get<ILockActionServices>(),_applicationViewModel.Kernel.Get<ICacheService>(), _applicationViewModel.Kernel.Get<ILog>());
+                    _dashboardViewModel?.Dispose();
+                    DataContext = new ReportViewModel(_applicationViewModel.Kernel.Get<ILockActionServices>(), _applicationViewModel.Kernel.Get<ICacheService>(), _applicationViewModel.Kernel.Get<ILog>());
                     break;
                 default:
                     break;
@@ -59,7 +63,7 @@ namespace FiksLockControl
 
         private void btnExit_Click(object sender, RoutedEventArgs e)
         {
-            if(MessageBox.Show("Are you sure you want to exit","Info",MessageBoxButton.OKCancel,MessageBoxImage.Information) == MessageBoxResult.OK)
+            if (MessageBox.Show("Are you sure you want to exit", "Info", MessageBoxButton.OKCancel, MessageBoxImage.Information) == MessageBoxResult.OK)
                 this.Close();
         }
     }

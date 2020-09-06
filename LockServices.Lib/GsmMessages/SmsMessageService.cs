@@ -4,6 +4,7 @@ using LockServices.Lib.Utilities;
 using log4net;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -87,7 +88,8 @@ namespace LockServices.Lib.GsmMessages
                                 _gsmMessagingService.SendMessage(this.DeleteMsgAtIndexCommand(msgIndex));
                             }
                             //Receive Actual Message
-                            else if (msg.StartsWith(SmsMessageConstants.ReceiveActualMsgAlert) || msg.StartsWith(SmsMessageConstants.ReceiveActualMsgAllAlert))
+                            else if (msg.StartsWith(SmsMessageConstants.ReceiveActualMsgAlert) || msg.StartsWith(SmsMessageConstants.ReceiveActualMsgAllAlert)
+                                        || msg.StartsWith(SmsMessageConstants.ReceiveActualMsgAlert01))
                             {
                                 partialMsg.Clear();
                                 partialMsg.Add(msg);
@@ -111,40 +113,73 @@ namespace LockServices.Lib.GsmMessages
 
         private async void ProcessActualMessages(List<string> messages)
         {
-            for (int i = 0; i < messages.Count; i++)
+            try
             {
-                _logger.Info($"ReceivedSmsMessage: ProcessActualMessages - Message:[{messages[i]}]");
-                var msg = messages[i];
-
-                //Receive Msg At Index
-                if (msg.Contains(SmsMessageConstants.ReceiveActualMsgAlert))
+                for (int i = 0; i < messages.Count; i++)
                 {
-                    var lineContent = msg.Split(',');
-                    var senderPhNo = lineContent[1].Replace("\"", string.Empty).Replace("+91", string.Empty);
-                    DateTime msgSentTime;
-                    DateTime.TryParse(lineContent[3], out msgSentTime);
+                    _logger.Info($"ReceivedSmsMessage: ProcessActualMessages - Message:[{messages[i]}]");
+                    var msg = messages[i];
 
-                    _logger.Info($"ReceivedSmsMessage: ProcessActualMessages - Message:[{messages[++i]}]");
-                    var lockStatus = messages[i];
-                    var result = await _lockActionService.UpdateLockStatus(senderPhNo, lockStatus);
-                }
-                else if(msg.Contains(SmsMessageConstants.ReceiveActualMsgAllAlert)) //Receive All Messages
-                {
-                    var lineContent = msg.Split(',');
-                    var msgIndex = lineContent[0].Substring(lineContent[0].IndexOf(":") + 1).Trim();
-                    _gsmMessagingService.SendMessage(this.DeleteMsgAtIndexCommand(msgIndex));
+                    //Receive Msg At Index
+                    if (msg.Contains(SmsMessageConstants.ReceiveActualMsgAlert))
+                    {
+                        var lineContent = msg.Split(',');
+                        var senderPhNo = lineContent[1].Replace("\"", string.Empty).Replace("+91", string.Empty);
+                        DateTime msgSentTime;
+                        DateTime.TryParse(lineContent[3], out msgSentTime);
 
-                    var senderPhNo = lineContent[2].Replace("\"", string.Empty).Replace("+91", string.Empty);
-                    DateTime msgSentTime;
-                    DateTime.TryParse(lineContent[4], out msgSentTime);
+                        _logger.Info($"ReceivedSmsMessage: ProcessActualMessages - Message:[{messages[++i]}]");
+                        var lockStatus = messages[i];
+                        var result = await _lockActionService.UpdateLockStatus(senderPhNo, lockStatus);
+                    }
+                    //Receive Realtime Msg
+                    if (msg.Contains(SmsMessageConstants.ReceiveActualMsgAlert01))
+                    {
+                        _logger.Info($"ReceivedSmsMessage: ProcessActualMessages - Before processing Message:[{messages[i]}]");
 
-                    _logger.Info($"ReceivedSmsMessage: ProcessActualMessages - Message:[{messages[++i]}]");
-                    var lockStatus = messages[i];
-                    var result = await _lockActionService.UpdateLockStatus(senderPhNo, lockStatus);
+                        //var lineContent = msg.Split(',');
+                        //var strPh = lineContent[0].Substring(lineContent[0].IndexOf("\"+"));
+                        //var senderPhNo = strPh.Replace("\"", string.Empty).Replace("+91", string.Empty);
+                        //DateTime msgSentTime;
+                        //DateTime.TryParse(lineContent[3], out msgSentTime);
+
+                        var lineContent = msg.SplitToCsv();
+                        var index = lineContent[0].IndexOf("+91");
+                        if (index != -1)
+                        {
+                            var senderPhNo = lineContent[0].Substring(index + 3);
+                            DateTime msgSentTime;
+                            DateTime.TryParseExact(lineContent[2].Replace("\"", string.Empty), "yy/MM/dd,HH:mm:ss+ff", CultureInfo.InvariantCulture,
+                                                    DateTimeStyles.None, out msgSentTime);
+                            _logger.Info($"ReceivedSmsMessage: ProcessActualMessages - Message:[{messages[++i]}]");
+                            var lockStatus = messages[i];
+                            var result = await _lockActionService.UpdateLockStatus(senderPhNo, lockStatus);
+                        }
+                        _logger.Warn($"ReceivedSmsMessage: Invalid Message - Message[msg]");
+                    }
+                    else if (msg.Contains(SmsMessageConstants.ReceiveActualMsgAllAlert)) //Receive All Messages
+                    {
+                        var lineContent = msg.Split(',');
+                        var msgIndex = lineContent[0].Substring(lineContent[0].IndexOf(":") + 1).Trim();
+                        _gsmMessagingService.SendMessage(this.DeleteMsgAtIndexCommand(msgIndex));
+
+                        var senderPhNo = lineContent[2].Replace("\"", string.Empty).Replace("+91", string.Empty);
+                        DateTime msgSentTime;
+                        DateTime.TryParse(lineContent[4], out msgSentTime);
+
+                        _logger.Info($"ReceivedSmsMessage: ProcessActualMessages - Message:[{messages[++i]}]");
+                        var lockStatus = messages[i];
+                        var result = await _lockActionService.UpdateLockStatus(senderPhNo, lockStatus);
+                    }
                 }
             }
+            catch (Exception ex)
+            {
+                _logger.ErrorFormat($"ProcessActualMessgaes: Exception thrown {ex}",ex);
+            }
+            
         }
 
-        
+
     }
 }

@@ -207,7 +207,7 @@
                     </Border>-->
 
             <syncfusion:SfBusyIndicator x:Name="BusyIndicator" VerticalAlignment="Bottom" 
-                   HorizontalAlignment="Center" Margin="0,0,0,350" Width="60" Height="50"
+                   HorizontalAlignment="Center" Margin="0,350,0,0" Width="60" Height="50"
                     AnimationType="Ripple" Foreground="#FF8522BD" Background="Transparent" ViewboxHeight="30"
                     IsBusy="{Binding Path=IsBusyIndicator}" Header="Loading..." >
             </syncfusion:SfBusyIndicator>

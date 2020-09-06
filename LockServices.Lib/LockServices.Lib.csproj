@@ -69,6 +69,7 @@
     <Compile Include="Services\LockActionServices.cs" />
     <Compile Include="Services\VersionCheck.cs" />
     <Compile Include="Utilities\CustomDateConverter.cs" />
+    <Compile Include="Utilities\HelperExtensions.cs" />
     <Compile Include="Utilities\SmsMessageConstants.cs" />
     <Compile Include="WebClientApi\FiksApiClient.cs" />
     <Compile Include="WebClientApi\IFiksApi.cs" />

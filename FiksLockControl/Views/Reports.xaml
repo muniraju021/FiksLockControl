@@ -4,7 +4,6 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
-             xmlns:syncfusionskin ="clr-namespace:Syncfusion.SfSkinManager;assembly=Syncfusion.SfSkinManager.WPF"
              xmlns:local="clr-namespace:FiksLockControl.Views"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              mc:Ignorable="d" 
@@ -17,9 +16,10 @@
             <Setter Property="Height" Value="50"/>
             <Setter Property="FontSize" Value="14"/>
             <Setter Property="Background" Value="#F64E51"/>
-            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Foreground" Value="Black"/>
             <Setter Property="FontFamily" Value="Champagne &amp; Limousines"/>
             <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Margin" Value="0"/>
         </Style>
         <Style TargetType="syncfusion:GridCell" x:Key="CellStyle">
             <Setter Property="FontSize" Value="12"/>
@@ -30,7 +30,7 @@
         </Style>
 
         <Style TargetType="syncfusion:VirtualizingCellsControl" x:Key="alternatingRowStyle">
-            <Setter Property="Background" Value="LightBlue"/>
+            <Setter Property="Background" Value="Aqua"/>
         </Style>
 
         <Style TargetType="syncfusion:VirtualizingCellsControl" x:Key="RowStyle">
@@ -52,7 +52,7 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"></RowDefinition>
-            <RowDefinition Height="8*"></RowDefinition>
+            <RowDefinition Height="7*"></RowDefinition>
         </Grid.RowDefinitions>
 
         <Border BorderBrush="#54FED4" BorderThickness="0" CornerRadius="5" Grid.Row="0" Grid.Column="0">
@@ -75,7 +75,21 @@
                             <StackPanel Orientation="Horizontal">
                                 <materialDesign:PackIcon Kind="Report" VerticalAlignment="Center" Width="15" Height="15" Margin="0,0,3,0" Foreground="White"/>
                                 <TextBlock HorizontalAlignment="Center" Text="Generate" 
-                            FontFamily="Champagne &amp; Limousines" Foreground="White" FontSize="12"/>
+                            FontFamily="Champagne &amp; Limousines" Foreground="White" FontSize="12"/>                                
+                            </StackPanel>
+                        </Button>
+                        <Button Width="130" Margin="20 0 0 0" x:Name="btnExportReport" Click="btnExportReport_Click"
+                            Style="{StaticResource MaterialDesignRaisedAccentButton}"
+                                materialDesign:ButtonAssist.CornerRadius="15" HorizontalAlignment="Center" 
+                            VerticalAlignment="Center">
+                            <Button.Resources>
+                                <SolidColorBrush x:Key="SecondaryAccentBrush" Color="#2AAAFF"/>
+                                <SolidColorBrush x:Key="SecondaryAccentForegroundBrush" Color="#2A7FFF"/>
+                            </Button.Resources>
+                            <StackPanel Orientation="Horizontal">
+                                <materialDesign:PackIcon Kind="Export" VerticalAlignment="Center" Width="15"  Height="15" Margin="0,0,3,0" Foreground="White"/>
+                                <TextBlock HorizontalAlignment="Center" Text="Export to Excel" 
+                                    FontFamily="Champagne &amp; Limousines" Foreground="White" FontSize="12"/>
                             </StackPanel>
                         </Button>
                     </StackPanel>
@@ -85,18 +99,15 @@
 
         <Grid Margin="0,5,0,0" Height="580" Grid.Row="1" VerticalAlignment="Top">
             <Border BorderBrush="#54FED4" BorderThickness="1" CornerRadius="5">
-                <StackPanel Background="#54FED4">
-                    <syncfusion:SfDataGrid x:Name="datagrid" Margin="10"     
-                               AlternatingRowStyle="{StaticResource alternatingRowStyle}"
-                               RowStyle="{StaticResource RowStyle}"
+                <StackPanel Background="#54FED4" Margin="5">
+                    <syncfusion:SfDataGrid x:Name="datagrid"   
                                HeaderStyle="{StaticResource headerStyle}"
-                               CellStyle="{StaticResource CellStyle}"
                                AllowDraggingColumns="True"                                   
                                AutoGenerateColumns="False"
                                AllowSorting="True"
                                AllowFiltering="True"
                                ColumnSizer="Star"       
-                               ScrollViewer.VerticalScrollBarVisibility="Auto"
+                               ScrollViewer.VerticalScrollBarVisibility="Disabled"
                                ItemsSource="{Binding ElementName=dataPager,Path=PagedSource}">
                         <syncfusion:SfDataGrid.Columns>
                             <syncfusion:GridTextColumn MappingName="LockStatus" HeaderText="Lock Status" />
@@ -114,5 +125,12 @@
                 </StackPanel>
             </Border>
         </Grid>
+
+        <syncfusion:SfBusyIndicator x:Name="BusyIndicator" VerticalAlignment="Bottom" 
+                   HorizontalAlignment="Center" Margin="0,380,0,0" Width="60" Height="50"
+                    AnimationType="Ripple" Foreground="#FF8522BD" Background="Black" ViewboxHeight="30"
+                    IsBusy="{Binding Path=IsBusyIndicator}" Header="Loading..." >
+        </syncfusion:SfBusyIndicator>
+        
     </Grid>
 </UserControl>

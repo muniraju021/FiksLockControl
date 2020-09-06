@@ -151,7 +151,7 @@ namespace LockServices.Lib.WebClientApi
                 var jObject = await response.Content.ReadAsAsync<JObject>();
                 var message = jObject.SelectToken("$..overallStatus", true)?.ToString();
 
-                _logger.Info($"FiksApiClient: GetLockHistory - emailId:{emailId} - vehicleNo:{vehicleNo} - Result:{message}");
+                _logger.Info($"FiksApiClient: GetLockHistory - emailId:{emailId} - vehicleNo:{vehicleNo} - Result:{message.ToList().Count}");
 
                 var obj = JsonConvert.DeserializeObject<List<LockStatusDO>>(message, new JsonSerializerSettings { DateFormatString = "dd-MM-yyyy HH:mm:ss" });
                 return obj;

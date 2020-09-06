@@ -17,11 +17,12 @@ using System.Windows.Input;
 
 namespace FiksLockControl.Model
 {
-    public class DashboardViewModel : BaseViewModel
+    public class DashboardViewModel : BaseViewModel, IDisposable
     {
         private ObservableCollection<LockInformationObject> _lstLockModels = new ObservableCollection<LockInformationObject>();
         private readonly ILockActionServices _lockActionServices;
         private readonly ILog _logger;
+        private static bool _updateProcessStarted = true;
 
         public string RowCount { get; set; }
 
@@ -86,7 +87,7 @@ namespace FiksLockControl.Model
             {
                 Task.Factory.StartNew(async () =>
                 {
-                    while (true)
+                    while (_updateProcessStarted)
                     {
                         var userInfo = _cacheService.GetUserCredentials();
                         if (userInfo != null)
@@ -106,6 +107,8 @@ namespace FiksLockControl.Model
                         }
                         Thread.Sleep(10000);
                     }
+                    _logger.Warn("DashboardViewModel: Long Running Update Thread Ended.");
+                    _updateProcessStarted = true;
                 }, TaskCreationOptions.LongRunning);
 
             }
@@ -144,10 +147,13 @@ namespace FiksLockControl.Model
             var viewModel = objLockHistoryView.DataContext as LockHistoryViewModel;
             var lockObj = obj as LockInformationObject;
             viewModel.GetLockHistory(lockObj.EmailId, lockObj.VehicleNumber);
-            viewModel.LastLockCode = lockObj.LatestLockCode;            
+            viewModel.LastLockCode = lockObj.LatestLockCode;
             await DialogHost.Show(objLockHistoryView);
         }
 
-
+        public void Dispose()
+        {
+            _updateProcessStarted = false;
+        }
     }
 }

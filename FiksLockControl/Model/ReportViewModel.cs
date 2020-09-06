@@ -15,7 +15,20 @@ namespace FiksLockControl.Model
     {
         private readonly ILog _logger;
         private readonly ILockActionServices _lockActionServices;
-        
+
+        private bool _isBusyIndicator;
+        public bool IsBusyIndicator
+        {
+            get
+            {
+                return _isBusyIndicator;
+            }
+            set
+            {
+                _isBusyIndicator = value;
+                RaisePropertyChanged("IsBusyIndicator");
+            }
+        }
 
         public ReportViewModel(ILockActionServices lockActionServices, ICacheService cacheService,ILog logger) : base(cacheService) 
         {
@@ -50,28 +63,40 @@ namespace FiksLockControl.Model
 
         public async void GetLockHistory()
         {
-            if (!string.IsNullOrWhiteSpace(SelectedVehNo))
+            IsBusyIndicator = true;
+            try
             {
-                var lockStatusHistory = await _lockActionServices.GetLockHistory(UserEmail, SelectedVehNo);
-
-                if (lockStatusHistory != null && lockStatusHistory.Count > 0)
+                if (!string.IsNullOrWhiteSpace(SelectedVehNo))
                 {
-                    var lockHistoryDetails = new ObservableCollection<LockStatusDO>();
-                    foreach (var item in lockStatusHistory)
+                    var lockStatusHistory = await _lockActionServices.GetLockHistory(UserEmail, SelectedVehNo);
+
+                    if (lockStatusHistory != null && lockStatusHistory.Count > 0)
                     {
-                        lockHistoryDetails.Add(item);
+                        var lockHistoryDetails = new ObservableCollection<LockStatusDO>();
+                        foreach (var item in lockStatusHistory)
+                        {
+                            lockHistoryDetails.Add(item);
+                        }
+                        LockHistoryDetails = lockHistoryDetails;
                     }
-                    LockHistoryDetails = lockHistoryDetails;
+                    else
+                    {
+                        _logger.ErrorFormat($"ReportViewModel: GetLockHistory - Invalid VehicleNo Selected - {SelectedVehNo}");
+                    }
                 }
                 else
                 {
                     _logger.ErrorFormat($"ReportViewModel: GetLockHistory - Invalid VehicleNo Selected - {SelectedVehNo}");
+                    throw new Exception("Invalid Vehicle No Selected");
                 }
             }
-            else
+            catch (Exception ex)
             {
-                _logger.ErrorFormat($"ReportViewModel: GetLockHistory - Invalid VehicleNo Selected - {SelectedVehNo}");
-                throw new Exception("Invalid Vehicle No Selected");
+                throw ex;
+            }
+            finally
+            {
+                IsBusyIndicator = false;
             }
 
         }
