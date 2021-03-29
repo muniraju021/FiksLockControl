@@ -30,7 +30,8 @@ namespace FiksLockControl.Model
             }
         }
 
-        public ReportViewModel(ILockActionServices lockActionServices, ICacheService cacheService,ILog logger) : base(cacheService) 
+        public ReportViewModel(ILockActionServices lockActionServices, ICacheService cacheService,ILog logger)
+            : base(cacheService,logger) 
         {
             _logger = logger;
             _lockActionServices = lockActionServices;
@@ -92,6 +93,7 @@ namespace FiksLockControl.Model
             }
             catch (Exception ex)
             {
+                _logger.Error($"Error in GetLockHistory - ", ex);
                 throw ex;
             }
             finally
@@ -103,20 +105,28 @@ namespace FiksLockControl.Model
 
         public async void GetVehicleNos()
         {
-            var userInfo = _cacheService.GetUserCredentials();
-            if (userInfo != null)
+            try
             {
-                var lstLockInfo = await _lockActionServices.GetVehiclesTagged(userInfo.EmailId);
-                var lstVehicles = lstLockInfo.Select(i => i.VehicleNumber).ToList();
-
-                var lstVehicleNo = new ObservableCollection<string>();
-                foreach (var item in lstVehicles)
+                var userInfo = _cacheService.GetUserCredentials();
+                if (userInfo != null)
                 {
-                    lstVehicleNo.Add(item);
+                    var lstLockInfo = await _lockActionServices.GetVehiclesTagged(userInfo.EmailId);
+                    var lstVehicles = lstLockInfo.Select(i => i.VehicleNumber).ToList();
+
+                    var lstVehicleNo = new ObservableCollection<string>();
+                    foreach (var item in lstVehicles)
+                    {
+                        lstVehicleNo.Add(item);
+                    }
+                    LstVehicleNo = lstVehicleNo;
                 }
-                LstVehicleNo = lstVehicleNo;
-               
             }
+            catch (Exception ex)
+            {
+                _logger.Error($"Error in GetVehicleNos - ", ex);
+                throw;
+            }
+            
         }
     }
 }

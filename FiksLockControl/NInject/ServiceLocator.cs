@@ -47,9 +47,19 @@ namespace FiksLockControl.NInject
             get { return _kernel.Get<MessageBoxViewModel>(); }
         }
 
+        public GenericMessageBoxViewModel ObjGenericMessageBoxViewModel
+        {
+            get { return _kernel.Get<GenericMessageBoxViewModel>(); }
+        }
+
         public ReportViewModel ObjReportViewModel
         {
             get { return _kernel.Get<ReportViewModel>(); }
+        }
+
+        public AdminSettingsModel ObjAdminSettingsModel
+        {
+            get { return _kernel.Get<AdminSettingsModel>(); }
         }
     }
 }

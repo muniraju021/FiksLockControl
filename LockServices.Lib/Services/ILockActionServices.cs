@@ -22,6 +22,7 @@ namespace LockServices.Lib.Services
         Task<string> UpdateLockStatus(string vehicleNo, string status);
         
         void OpenLock(string code, string phoneNo, ref ApiResponseMessage objApiRespMessage);
-        
+
+        void ReadAllMessages();
     }
 }

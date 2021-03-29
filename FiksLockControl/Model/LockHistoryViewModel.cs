@@ -48,26 +48,36 @@ namespace FiksLockControl.Model
             }
         }
 
-        public LockHistoryViewModel(ILockActionServices lockActionServices, ICacheService cacheService, ILog logger) : base(cacheService)
+        public LockHistoryViewModel(ILockActionServices lockActionServices, ICacheService cacheService, ILog logger) 
+            : base(cacheService,logger)
         {
             _lockActionServices = lockActionServices;
             _logger = logger;
         }
 
         public async void GetLockHistory(string emailId,string vehicleNumber)
-        {            
-            VehicleNumber = vehicleNumber;
-            var lockStatusHistory = await _lockActionServices.GetLockHistory(emailId, vehicleNumber);
-
-            if (lockStatusHistory != null && lockStatusHistory.Count > 0)
+        {
+            try
             {
-                var overrallStatus = new ObservableCollection<LockStatusDO>();
-                foreach (var item in lockStatusHistory)
+                VehicleNumber = vehicleNumber;
+                var lockStatusHistory = await _lockActionServices.GetLockHistory(emailId, vehicleNumber);
+
+                if (lockStatusHistory != null && lockStatusHistory.Count > 0)
                 {
-                    overrallStatus.Add(item);
+                    var overrallStatus = new ObservableCollection<LockStatusDO>();
+                    foreach (var item in lockStatusHistory)
+                    {
+                        overrallStatus.Add(item);
+                    }
+                    LockStatusLst = overrallStatus;
                 }
-                LockStatusLst = overrallStatus;
             }
+            catch (Exception ex)
+            {
+                _logger.Error($"Error in GetLockHistory - ", ex);
+                throw;
+            }
+            
 
         }
     }

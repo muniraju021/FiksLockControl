@@ -3,6 +3,7 @@ using LockServices.Lib.Services;
 using LockServices.Lib.Utilities;
 using log4net;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -24,19 +25,23 @@ namespace LockServices.Lib.GsmMessages
         void ProcessReceivedMessages();
         //Select Storage Command
         string GetSelectStorageCommand();
+
+        string SentAtCommand();
+        
     }
     public class SmsMessageService : ISmsMessageService
     {
         private readonly IGsmMessagingService _gsmMessagingService;
         private static ILog _logger;
-        private ILockActionServices _lockActionService;
+        private IApiService _apiService;
+        private static BlockingCollection<string> _deleteSmsMessageslst = new BlockingCollection<string>();
 
-        public SmsMessageService(IGsmMessagingService gsmMessagingService, ILog logger, ILockActionServices lockActionService)
+        public SmsMessageService(IGsmMessagingService gsmMessagingService, ILog logger, IApiService apiService)
         {
             _gsmMessagingService = gsmMessagingService;
-            _lockActionService = lockActionService;
+            _apiService = apiService;
             _logger = logger;
-            ProcessReceivedMessages();
+            //ProcessReceivedMessages();
         }
 
         public string GetMessageAllCommand()
@@ -59,9 +64,20 @@ namespace LockServices.Lib.GsmMessages
             return string.Format(SmsMessageConstants.SelectStorageCommand);
         }
 
+        public string SentAtCommand()
+        {
+            return string.Format(SmsMessageConstants.AtCommand);
+        }
+
+        private void DeleteMessageAtIndex(string msgIndex)
+        {
+            var cmdStr = this.DeleteMsgAtIndexCommand(msgIndex);
+            _deleteSmsMessageslst.Add(cmdStr);
+        }
+        
         public void ProcessReceivedMessages()
         {
-            if (_gsmMessagingService.IsSmsConnectionActive())
+            if (!_gsmMessagingService.IsSmsConnectionActive())
             {
                 _logger.Warn($"SendSmsMessages: SendLockCodeMessage - Initalizing SerialPort Connection");
                 _gsmMessagingService.InitializeSerialConnection(ReceiveSmsMessage.ProcessSerialPortMessages);
@@ -84,8 +100,12 @@ namespace LockServices.Lib.GsmMessages
                             {
                                 var msgIndex = msg.Substring(msg.IndexOf(",") + 1);
                                 _gsmMessagingService.SendMessage(this.GetMessageAtIndexCommand(msgIndex));
-                                Thread.Sleep(1000);
-                                _gsmMessagingService.SendMessage(this.DeleteMsgAtIndexCommand(msgIndex));
+                                //Thread.Sleep(1000);
+                                //_gsmMessagingService.SendMessage(this.DeleteMsgAtIndexCommand(msgIndex));
+
+                                this.DeleteMessageAtIndex(msgIndex);
+                                if(msgIndex == "1")
+                                    _gsmMessagingService.SendMessage(this.SentAtCommand());
                             }
                             //Receive Actual Message
                             else if (msg.StartsWith(SmsMessageConstants.ReceiveActualMsgAlert) || msg.StartsWith(SmsMessageConstants.ReceiveActualMsgAllAlert)
@@ -97,8 +117,17 @@ namespace LockServices.Lib.GsmMessages
                             else if (partialMsg.Count > 0)
                             {
                                 partialMsg.Add(msg);
-                                ProcessActualMessages(partialMsg);
+                                ProcessActualMessages(partialMsg).Wait();
                                 partialMsg.Clear();
+                            }
+                            else if(msg.StartsWith(SmsMessageConstants.ReplyAtCommand))
+                            {
+                                var delStr = string.Empty;
+                                if (_deleteSmsMessageslst.TryTake(out delStr))
+                                {
+                                    _logger.Info($"SmsMessageService: DeleteMsgAtIndexCommand Sending - [{delStr}]");
+                                    _gsmMessagingService.SendMessage(delStr);
+                                }
                             }
                         }
                     }
@@ -111,7 +140,7 @@ namespace LockServices.Lib.GsmMessages
             }, TaskCreationOptions.LongRunning);
         }
 
-        private async void ProcessActualMessages(List<string> messages)
+        private async Task ProcessActualMessages(List<string> messages)
         {
             try
             {
@@ -130,7 +159,8 @@ namespace LockServices.Lib.GsmMessages
 
                         _logger.Info($"ReceivedSmsMessage: ProcessActualMessages - Message:[{messages[++i]}]");
                         var lockStatus = messages[i];
-                        var result = await _lockActionService.UpdateLockStatus(senderPhNo, lockStatus);
+                        _logger.Info($"ReceivedSmsMessage: ProcessActualMessages - UpdateLockStatus Intiated Case 1 - LockStatus:{lockStatus}");
+                        var result = await _apiService.UpdateLockStatus(senderPhNo, lockStatus);
                     }
                     //Receive Realtime Msg
                     if (msg.Contains(SmsMessageConstants.ReceiveActualMsgAlert01))
@@ -153,7 +183,8 @@ namespace LockServices.Lib.GsmMessages
                                                     DateTimeStyles.None, out msgSentTime);
                             _logger.Info($"ReceivedSmsMessage: ProcessActualMessages - Message:[{messages[++i]}]");
                             var lockStatus = messages[i];
-                            var result = await _lockActionService.UpdateLockStatus(senderPhNo, lockStatus);
+                            _logger.Info($"ReceivedSmsMessage: ProcessActualMessages - UpdateLockStatus Intiated Case 2 - LockStatus:{lockStatus}");
+                            var result = await _apiService.UpdateLockStatus(senderPhNo, lockStatus);
                         }
                         _logger.Warn($"ReceivedSmsMessage: Invalid Message - Message[msg]");
                     }
@@ -161,7 +192,11 @@ namespace LockServices.Lib.GsmMessages
                     {
                         var lineContent = msg.Split(',');
                         var msgIndex = lineContent[0].Substring(lineContent[0].IndexOf(":") + 1).Trim();
-                        _gsmMessagingService.SendMessage(this.DeleteMsgAtIndexCommand(msgIndex));
+
+                        this.DeleteMessageAtIndex(msgIndex);
+                        if(msgIndex == "1")
+                            _gsmMessagingService.SendMessage(this.SentAtCommand());
+                        //_gsmMessagingService.SendMessage(this.DeleteMsgAtIndexCommand(msgIndex));
 
                         var senderPhNo = lineContent[2].Replace("\"", string.Empty).Replace("+91", string.Empty);
                         DateTime msgSentTime;
@@ -169,17 +204,15 @@ namespace LockServices.Lib.GsmMessages
 
                         _logger.Info($"ReceivedSmsMessage: ProcessActualMessages - Message:[{messages[++i]}]");
                         var lockStatus = messages[i];
-                        var result = await _lockActionService.UpdateLockStatus(senderPhNo, lockStatus);
+                        _logger.Info($"ReceivedSmsMessage: ProcessActualMessages - UpdateLockStatus Intiated Case 3 - LockStatus:{lockStatus}");
+                        var result = await _apiService.UpdateLockStatus(senderPhNo, lockStatus);
                     }
                 }
             }
             catch (Exception ex)
             {
                 _logger.ErrorFormat($"ProcessActualMessgaes: Exception thrown {ex}",ex);
-            }
-            
+            }            
         }
-
-
     }
 }

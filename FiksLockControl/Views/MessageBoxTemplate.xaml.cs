@@ -1,5 +1,6 @@
 ﻿using FiksLockControl.Model;
 using LockServices.Lib.DataObjects;
+using MaterialDesignThemes.Wpf;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -30,6 +31,7 @@ namespace FiksLockControl.Views
             InitializeComponent();
 
             _viewModel = DataContext as MessageBoxViewModel;
+            _viewModel.OpenLockButtonStatus = true;
         }
 
         private void btnOpenLock_Click(object sender, RoutedEventArgs e)
@@ -37,8 +39,30 @@ namespace FiksLockControl.Views
             try
             {
                 var objApiResponse = new ApiResponseMessage();
-                _viewModel.OpenLock(_viewModel.LockCode, _viewModel.LockPhoneNo, ref objApiResponse);
+                _viewModel.OpenLockButtonStatus = false;
+                _viewModel.IsBusyIndicator = true;
+                Task.Factory.StartNew(async() =>
+                {
+                    await _viewModel.OpenLock(_viewModel.LockCode, _viewModel.LockPhoneNo, objApiResponse);
+                });                                             
                 
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error in Opening Lock. Contact Admin");
+            }
+            finally
+            {
+                //btnOpenLock.IsEnabled = true;
+            }
+        }
+
+        private void btnExit_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                DialogHost.CloseDialogCommand.Execute(null, null);
+
             }
             catch (Exception ex)
             {

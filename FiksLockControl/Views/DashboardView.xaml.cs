@@ -30,24 +30,11 @@ namespace FiksLockControl.Views
             _viewModel.Initialize();
         }
 
-        private async void btnGetLockHistory_Click(object sender, RoutedEventArgs e)
+        private void btnGetLockHistory_Click(object sender, RoutedEventArgs e)
         {
-            //var btn = e.Source as Button;
-            //var obj = btn.DataContext as LockInformationObject;
-            //Window.GetWindow(this.VisualParent).Opacity = 0.5;
-
-            //LockHistoryView objLockHist = new LockHistoryView();
-            //objLockHist.Closed += (objLockHistSender, e1) =>
-            //{
-            //    Window.GetWindow(this.VisualParent).Opacity = 1;
-            //};
-            //var viewModel = (objLockHist.DataContext as LockHistoryViewModel);
-            //viewModel.GetLockHistory(obj.EmailId, obj.VehicleNumber);
-            //viewModel.LastLockCode = obj.LatestLockCode;
-            //objLockHist.ShowDialog();           
-
             var btn = e.Source as Button;
             var obj = btn.DataContext as LockInformationObject;
+            obj.DialogHostTypeInstance = DialogHostType.LockHistory;
             _viewModel.ShowDialogCommand.Execute(obj);
         }
 
@@ -57,18 +44,20 @@ namespace FiksLockControl.Views
             {
                 var btn = e.Source as Button;
                 var obj = btn.DataContext as LockInformationObject;
-                var objApiResponse = new ApiResponseMessage();
-                _viewModel.OpenLock(obj.LatestLockCode, obj.LockPhNo, ref objApiResponse);
-                if (string.IsNullOrEmpty(objApiResponse.ErrorMessage))
-                {
-                    var lockStatus = "SMS Sent Status: SENT";
-                    MessageBox.Show(lockStatus, "Status", MessageBoxButton.OK, MessageBoxImage.Information);
-                }
-                else
-                {
-                    var lockStatus = objApiResponse.ErrorMessage;
-                    MessageBox.Show(lockStatus, "Status", MessageBoxButton.OK, MessageBoxImage.Error);
-                }
+                obj.DialogHostTypeInstance = DialogHostType.OpenLock;
+                _viewModel.ShowDialogCommand.Execute(obj);
+                //var objApiResponse = new ApiResponseMessage();
+                //_viewModel.OpenLock(obj.LatestLockCode, obj.LockPhNo, ref objApiResponse);
+                //if (string.IsNullOrEmpty(objApiResponse.ErrorMessage))
+                //{
+                //    var lockStatus = "SMS Sent Status: SENT";
+                //    MessageBox.Show(lockStatus, "Status", MessageBoxButton.OK, MessageBoxImage.Information);
+                //}
+                //else
+                //{
+                //    var lockStatus = objApiResponse.ErrorMessage;
+                //    MessageBox.Show(lockStatus, "Status", MessageBoxButton.OK, MessageBoxImage.Error);
+                //}
             }
             catch (Exception ex)
             {

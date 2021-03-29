@@ -23,4 +23,12 @@ namespace LockServices.Lib.Utilities
         }
     }
 
+    public class CustomDateTimeConverter : IsoDateTimeConverter
+    {
+        public CustomDateTimeConverter()
+        {
+            DateTimeFormat = "dd-MM-yyyy HH:mm:ss";
+        }
+    }
+
 }

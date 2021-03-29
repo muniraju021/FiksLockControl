@@ -1,7 +1,10 @@
 ﻿using FiksLockControl.Model;
+using FiksLockControl.Utilities;
 using LockServices.Lib.CustomException;
 using LockServices.Lib.DataObjects;
 using LockServices.Lib.Services;
+using log4net;
+using MaterialDesignThemes.Wpf;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,10 +29,12 @@ namespace FiksLockControl.Views
     {
         private readonly GenerateCodesViewModel _viewModel;
         private static string CodeGenerationStatus = $"Code Generation Status: {0} {Environment.NewLine} SMS Send Status:{1}";
+
         public GetCodesControl()
         {
             InitializeComponent();
             _viewModel = (DataContext as GenerateCodesViewModel);
+            //_viewModel.IsBusyIndicator = true;
             Initialize();
         }
 
@@ -40,59 +45,65 @@ namespace FiksLockControl.Views
 
         private async void GenerateButton_Click(object sender, RoutedEventArgs e)
         {
+            var btn = e.Source as Button;
             try
-            {
-                var btn = e.Source as Button;
+            {                
                 var obj = btn.DataContext as LockInformationObject;
+                btn.IsEnabled = false;
 
                 var currLockStatus = await _viewModel.GetLockHistory(obj.VehicleNumber);
-                if(currLockStatus != null && currLockStatus.Count > 0)
+                if (currLockStatus != null && currLockStatus.Count > 0)
                 {
                     int code;
-                    if(currLockStatus[0].LockStatus.Contains("LOCK_OPEN") || int.TryParse(currLockStatus[0].LockStatus,out code))
+                    if (currLockStatus[0].LockStatus.Contains("LOCK_OPEN") || int.TryParse(currLockStatus[0].LockStatus, out code))
                     {
-                        if(MessageBox.Show($"Code is already Generated or Lock is in Open State {Environment.NewLine}Please confirm if you want to generate Code again",
-                            "Warning", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.No)
+                        var dialog = new GenericMessageBoxTemplate();                        
+                        var model = dialog.DataContext as GenericMessageBoxViewModel;
+                        model.TitleName = MessageBoxTitles.Warning.ToString();
+                        model.MessageContent = $"Code is already Generated or Lock is in Open State. Please confirm if you want to generate Code again";
+                        var res = await MaterialDesignThemes.Wpf.DialogHost.Show(dialog, "DialogHostCtrl");
+
+                        if (Convert.ToBoolean(res))
                         {
-                            return;
+                            var result = await _viewModel.GenerateCode(obj.VehicleNumber);
+                            
+                            if (result != null)
+                            {
+                                if (!string.IsNullOrWhiteSpace(result.LockCode))
+                                {
+                                    obj.CodeList[0].Code = result.LockCode;
+                                    _viewModel.ShowDialogCommand.Execute(obj);
+                                }
+                                else
+                                {
+                                    var lockStatus = $"Code Generation: UnSuccessful - {result.ErrorMessage}";
+                                    MessageBox.Show(lockStatus, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                                }
+                            }
                         }
-                    }
-                }
-                
-                var result = await _viewModel.GenerateCode(obj.VehicleNumber);
-
-                if(result != null)
-                {
-                    if(!string.IsNullOrWhiteSpace(result.LockCode))
-                    {
-                        obj.CodeList[0].Code = result.LockCode;
-                        _viewModel.ShowDialogCommand.Execute(obj);
-                        //var lockStatus = $"Code Generation: Successful - {result.LockCode} {Environment.NewLine}Do you want to Open Lock?";
-                        //if(MessageBox.Show(lockStatus,"Info",MessageBoxButton.YesNo,MessageBoxImage.Question) == MessageBoxResult.Yes)
-                        //{
-                        //    _viewModel.OpenLock(result.LockCode, obj.LockPhNo, ref result);
-
-                        //    if (string.IsNullOrEmpty(result.ErrorMessage))
-                        //    {
-                        //        lockStatus = "SMS Sent Status: SENT";
-                        //        MessageBox.Show(lockStatus, "Status", MessageBoxButton.OK, MessageBoxImage.Information);
-                        //    }
-                        //    else
-                        //    {
-                        //        lockStatus = result.ErrorMessage;
-                        //        MessageBox.Show(lockStatus, "Status", MessageBoxButton.OK, MessageBoxImage.Error);
-                        //    }
-                        //}                        
                     }
                     else
                     {
-                        var lockStatus = $"Code Generation: UnSuccessful - {result.ErrorMessage}";
-                        MessageBox.Show(lockStatus, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                    }                   
+                        var result = await _viewModel.GenerateCode(obj.VehicleNumber);
+
+                        if (result != null)
+                        {
+                            if (!string.IsNullOrWhiteSpace(result.LockCode))
+                            {
+                                obj.CodeList[0].Code = result.LockCode;
+                                _viewModel.ShowDialogCommand.Execute(obj);
+                            }
+                            else
+                            {
+                                var lockStatus = $"Code Generation: UnSuccessful - {result.ErrorMessage}";
+                                MessageBox.Show(lockStatus, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                            }
+                        }
+                    }
                 }
-                
+
             }
-            catch(GsmTimeoutException ex)
+            catch (GsmTimeoutException ex)
             {
                 MessageBox.Show($"Code Generated:{ex.Code} - Exception:{ex}");
             }
@@ -100,8 +111,12 @@ namespace FiksLockControl.Views
             {
                 MessageBox.Show($"Error - {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
+            finally
+            {
+                btn.IsEnabled = true;
+            }
         }
-        
+
         private void btnOpenLock_Click(object sender, RoutedEventArgs e)
         {
             try
@@ -126,5 +141,6 @@ namespace FiksLockControl.Views
                 MessageBox.Show($"Error - {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
+
     }
 }

@@ -11,10 +11,10 @@
         xmlns:views ="clr-namespace:FiksLockControl.Views"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         syncfusionskin:SfSkinManager.VisualStyle="Metro"  SnapsToDevicePixels="True" 
-        Icon="Images/icon.ico"
+        Icon="Images/logo.ico"
         ResizeMode="NoResize" WindowStartupLocation="CenterScreen" WindowStyle="None"
         DataContext="{Binding Path=ObjApplicationViewModel, Source={StaticResource ServiceLocator}}"
-        Title="Auximo Lock" Height="700" Width="1090" >
+        Title="Transport Locks" Height="700" Width="1090" >
 
     <Window.Resources>
         <Storyboard x:Key="OpenMenu">
@@ -43,10 +43,37 @@
         <DataTemplate x:Name="ReportsViewTemplate" DataType="{x:Type viewModels:ReportViewModel}">
             <views:Reports DataContext="{Binding}"></views:Reports>
         </DataTemplate>
+        <DataTemplate x:Name="Troubleshoot" DataType="{x:Type viewModels:AdminSettingsModel}">
+            <views:Troubleshoot DataContext="{Binding}"></views:Troubleshoot>
+        </DataTemplate>
 
         <Style x:Key="UserNameTextBlockStyle" TargetType="{x:Type TextBlock}">
             <Setter Property="FontFamily" Value="Champagne &amp; Limousines"/>
             <Setter Property="Foreground" Value="Gray"/>
+        </Style>
+
+        <Style x:Key="VersionTextBlockStyle" TargetType="{x:Type TextBlock}">
+            <Setter Property="FontFamily" Value="Champagne &amp; Limousines"/>
+            <Setter Property="Foreground" Value="White"/>
+        </Style>
+
+        <Style x:Key="FaderStyle" TargetType="{x:Type TextBlock}">
+            <Style.Resources>
+                <Storyboard x:Key="FadeStoryboard">
+                    <DoubleAnimation Storyboard.TargetProperty="(TextBlock.Opacity)" 
+                                From="0" To="1" Duration="0:0:0.5"
+                                RepeatBehavior="Forever" AutoReverse="True"/>
+                </Storyboard>
+            </Style.Resources>
+            <Style.Triggers>
+                <Trigger Property="Visibility" Value="Visible">
+                    <Trigger.EnterActions>
+                        <BeginStoryboard Storyboard="{StaticResource FadeStoryboard}"/>
+                    </Trigger.EnterActions>
+                </Trigger>
+            </Style.Triggers>
+            <Setter Property="FontFamily" Value="Champagne &amp; Limousines"/>
+            <Setter Property="Foreground" Value="#FFB12F"/>
         </Style>
     </Window.Resources>
 
@@ -61,7 +88,7 @@
 
 
     <Border BorderBrush="#00D4FF" BorderThickness="1.5,0,1.5,1.5">
-        <materialDesign:DialogHost x:Name="DialogHostCtrl" BorderBrush="{DynamicResource MaterialDesignDivider}" IsOpen="{Binding IsDialogHostOpen}">
+        <materialDesign:DialogHost x:Name="DialogHostCtrl" Identifier="DialogHostCtrl" BorderBrush="{DynamicResource MaterialDesignDivider}" IsOpen="{Binding IsDialogHostOpen}">
             <materialDesign:DialogHost.DialogContent>
                 <ContentControl>
 
@@ -78,7 +105,7 @@
                 </Grid.RowDefinitions>
 
                 <Grid Grid.Row="0" Grid.ColumnSpan="2">
-                    <Grid Grid.Column="1" Grid.Row="0" Background="#2196F3">
+                    <Grid Grid.Column="1" Grid.Row="0" Background="#464646">
                         <Grid.Effect>
                             <DropShadowEffect BlurRadius="1" ShadowDepth="1" Color="#FFACACAC"/>
                         </Grid.Effect>
@@ -87,14 +114,13 @@
                             <ColumnDefinition></ColumnDefinition>
                         </Grid.ColumnDefinitions>
                         <StackPanel Orientation="Horizontal" Grid.Column="0" HorizontalAlignment="Left">
-                            <Image Margin="10,5,5,5" Source="Images/logo.png" Width="60" Height="30"></Image>
-                            <TextBlock Text="LOCK Control" Style="{StaticResource HeaderTextBlockStyle}" 
-                               Margin="15,10,10,10" VerticalAlignment="Center"
-                               HorizontalAlignment="Right"></TextBlock>
+                            <Image Margin="10,5,0,5" Source="Images/logo.png" Width="100" Height="50"></Image>                                                        
+                            <TextBlock x:Name="txtVersionUpdate" Margin="30 0" Text="{Binding NewVersionMsg, Mode=TwoWay}" VerticalAlignment="Center" FontSize="16" Style="{StaticResource FaderStyle}"></TextBlock>
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Grid.Column="1">
+                            <TextBlock Margin="0 0 10 10" Style="{StaticResource VersionTextBlockStyle}" Text="{Binding CurrentVersion}" VerticalAlignment="Bottom"></TextBlock>
                             <Button x:Name="btnExit" Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}" Width="25" Height="25" Background="{x:Null}" BorderBrush="{x:Null}" 
-                        Foreground="White" Click="btnExit_Click" >
+                                    Foreground="White" Click="btnExit_Click" >
                                 <materialDesign:PackIcon Kind="Power" Width="20" Height="20"/>
                             </Button>
                             <materialDesign:PopupBox PlacementMode="BottomAndAlignRightEdges" StaysOpen="False" Margin="10" Foreground="White">
@@ -160,7 +186,7 @@
                 </Grid>
 
                 <DockPanel Grid.Column="1" Grid.Row="1" Background="#FFCFCFCF" >
-                    <ContentControl Content="{Binding}" HorizontalAlignment="Stretch" >
+                    <ContentControl x:Name="contentCtrl" Content="{Binding}" HorizontalAlignment="Stretch" >
 
                     </ContentControl>
                 </DockPanel>

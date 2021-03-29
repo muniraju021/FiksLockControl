@@ -21,7 +21,7 @@
         <Style TargetType="syncfusion:GridHeaderCellControl" x:Key="headerStyle">
             <Setter Property="FontWeight" Value="Bold"/>
             <Setter Property="FontSize" Value="14"/>
-            <Setter Property="Background" Value="#F64E51"/>
+            <Setter Property="Background" Value="#464646"/>
             <Setter Property="Foreground" Value="White"/>
             <Setter Property="FontFamily" Value="Champagne &amp; Limousines"/>
             <Setter Property="VerticalAlignment" Value="Center"/>
@@ -143,12 +143,12 @@
 
         <StackPanel Grid.Row="0">
             <Grid>
-                <Rectangle Height="30" Fill="blue"></Rectangle>
+                <Rectangle Height="30" Fill="#FFB12F"></Rectangle>
                 <StackPanel Margin="5,0,0,0" VerticalAlignment="Center" Orientation="Horizontal">
                     <materialDesign:PackIcon Kind="History" Width="20" Height="20" 
                       Foreground="White" VerticalAlignment="Center"/>
                     <TextBlock Text="Lock History" HorizontalAlignment="Left" Margin="10,0,0,0"
-                  Style="{StaticResource HeaderTextBlockStyle}" Foreground="White" FontSize="20" VerticalAlignment="Center"></TextBlock>
+                  Style="{StaticResource HeaderTextBlockStyle}" Foreground="Black" FontSize="20" VerticalAlignment="Center"></TextBlock>
                 </StackPanel>
                 <Button x:Name="btnClose" Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
                         VerticalAlignment="Center" Width="20" Height="20" Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}"

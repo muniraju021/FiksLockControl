@@ -6,8 +6,9 @@
              xmlns:local="clr-namespace:FiksLockControl.Views"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              DataContext="{Binding Path=ObjMessageBoxViewModel, Source={StaticResource ServiceLocator}}"
+             xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
              mc:Ignorable="d" 
-             d:DesignHeight="160" d:DesignWidth="300">
+             d:DesignHeight="225" d:DesignWidth="350">
 
     <UserControl.Resources>
         <Style x:Key="MessageTextBlockStyle" TargetType="{x:Type TextBlock}">
@@ -16,35 +17,42 @@
         </Style>
     </UserControl.Resources>
     <Grid>
-        <StackPanel Width="300" HorizontalAlignment="Center">
-            <Grid Margin="0 -2 0 0">
-                <Rectangle Height="22" Fill="#2196F3" >
+        <StackPanel Width="350">
+            <Grid Margin="0 -4 0 0">
+                <Rectangle Height="22" Fill="#464646" >
                     <Rectangle.Effect>
                         <DropShadowEffect BlurRadius="20" Color="#FFDEDEDE" RenderingBias="Quality" ShadowDepth="1"/>
                     </Rectangle.Effect>
                 </Rectangle>
                 <Grid Grid.Row="0">
                     <StackPanel Orientation="Horizontal">
-                        <materialDesign:PackIcon Kind="Information" Height="15" Width="10" Margin="5" Foreground="White"/>
-                        <TextBlock Style="{StaticResource MessageTextBlockStyle}" Foreground="White" Margin="0 5 5 5" Text="Info"/>
+                        <materialDesign:PackIcon Kind="Information" Height="20" Width="15" Margin="5" Foreground="White"/>
+                        <TextBlock Style="{StaticResource MessageTextBlockStyle}" VerticalAlignment="Center" Foreground="White" FontSize="14" Margin="0 5 5 5" Text="{Binding MessageBoxTitle}"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Grid.Column="1">
+                            <Button x:Name="btnExit" Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}" Width="25" Height="25" Background="{x:Null}" BorderBrush="{x:Null}" 
+                                        Foreground="White" Click="btnExit_Click" >
+                                <materialDesign:PackIcon Kind="Close" Width="15" Height="20"/>
+                            </Button>
+                        </StackPanel>
                     </StackPanel>
                 </Grid>
             </Grid>
-            <StackPanel Orientation="Horizontal" Margin="10" >
-                <TextBlock Style="{StaticResource MessageTextBlockStyle}" VerticalAlignment="Center" Text="{Binding MessageContent}" />
-                <TextBlock Style="{StaticResource MessageTextBlockStyle}" VerticalAlignment="Center"
-                           FontWeight="Bold" FontSize="18" Text="{Binding LockCode}"/>
-            </StackPanel>            
+            <StackPanel Orientation="Vertical" Margin="5" >
+                <TextBlock Style="{StaticResource MessageTextBlockStyle}" Margin="5" VerticalAlignment="Center" Text="{Binding MessageContent, Mode=TwoWay}" />
+                <TextBlock Style="{StaticResource MessageTextBlockStyle}" Margin="5" VerticalAlignment="Center" HorizontalAlignment="Center" FontWeight="Bold" FontSize="30" Text="{Binding LockCode, Mode=TwoWay}"/>
+            </StackPanel>
 
-            <StackPanel Margin="10" Orientation="Horizontal" HorizontalAlignment="Center">
+            <StackPanel Margin="10,25,10,0" Orientation="Horizontal" HorizontalAlignment="Center">
                 <Button Width="120" x:Name="btnOpenLock" Click="btnOpenLock_Click"
-                        Style="{StaticResource MaterialDesignRaisedAccentButton}"
-                    materialDesign:ButtonAssist.CornerRadius="15" HorizontalAlignment="Center" 
+                        Style="{StaticResource MaterialDesignCustomButton}" IsEnabled="{Binding OpenLockButtonStatus}"
+                    materialDesign:ButtonAssist.CornerRadius="5" HorizontalAlignment="Center"
                 VerticalAlignment="Center">
-                    <Button.Resources>
+                    <!--<Button.Resources>
                         <SolidColorBrush x:Key="SecondaryAccentBrush" Color="#2AAAFF"/>
                         <SolidColorBrush x:Key="SecondaryAccentForegroundBrush" Color="#2A7FFF"/>
-                    </Button.Resources>
+                    </Button.Resources>-->
                     <StackPanel Orientation="Horizontal">
                         <materialDesign:PackIcon Kind="lock" VerticalAlignment="Center" Width="15" Height="15" Margin="0,0,3,0" Foreground="White"/>
                         <TextBlock HorizontalAlignment="Center" Text="Open Lock" 
@@ -52,29 +60,38 @@
                     </StackPanel>
                 </Button>
 
-               
+
                 <Button Width="120" x:Name="BtnCancel" Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}"
-                        Style="{StaticResource MaterialDesignRaisedAccentButton}" Margin="20,0,0,0"
-                    materialDesign:ButtonAssist.CornerRadius="15" HorizontalAlignment="Center" 
+                        Style="{StaticResource MaterialDesignCustomButton}" Margin="20,0,0,0"
+                    materialDesign:ButtonAssist.CornerRadius="5" HorizontalAlignment="Center" 
                 VerticalAlignment="Center" Foreground="White">
-                    <Button.Resources>
+                    <!--<Button.Resources>
                         <SolidColorBrush x:Key="SecondaryAccentBrush" Color="#2AAAFF"/>
                         <SolidColorBrush x:Key="SecondaryAccentForegroundBrush" Color="#2A7FFF"/>
-                    </Button.Resources>
+                    </Button.Resources>-->
                     <StackPanel Orientation="Horizontal">
                         <materialDesign:PackIcon Kind="Cancel" VerticalAlignment="Center" Width="15" Height="15" Margin="0,0,3,0" Foreground="White"/>
-                        <TextBlock HorizontalAlignment="Center" Text="Cancel" 
+                        <TextBlock HorizontalAlignment="Center" Text="Close" 
                             FontFamily="Champagne &amp; Limousines" Foreground="White" FontSize="12"/>
-                    </StackPanel>                    
+                    </StackPanel>
                 </Button>
             </StackPanel>
             <StackPanel Orientation="Horizontal" Margin="10 10 10 5">
                 <TextBlock Style="{StaticResource MessageTextBlockStyle}" Margin="0 0 5 0" 
-                     HorizontalAlignment="Left" VerticalAlignment="Center" Foreground="Red" FontSize="12" Text="Status: "/>
-                <TextBlock Style="{StaticResource MessageTextBlockStyle}" Margin="0 10" VerticalAlignment="Center"
-                     HorizontalAlignment="Left" Foreground="Red" FontSize="12" Text="{Binding ProgressStatus}"/>
+                     HorizontalAlignment="Left" VerticalAlignment="Center" Foreground="Red" FontWeight="Bold" FontSize="18" Text="Status: "/>
+                <TextBlock Style="{StaticResource MessageTextBlockStyle}" Margin="0 12" VerticalAlignment="Center"
+                     HorizontalAlignment="Left" Foreground="Red" FontSize="18" FontWeight="Bold" Text="{Binding ProgressStatus, Mode=TwoWay}"/>
             </StackPanel>
 
         </StackPanel>
+
+        <syncfusion:SfBusyIndicator x:Name="BusyIndicator" VerticalAlignment="Bottom" 
+                   HorizontalAlignment="Center" Margin="120,0,120,90" Width="60" Height="50" 
+                    AnimationType="Ripple" Foreground="#FF8522BD" Background="Transparent" ViewboxHeight="30"
+                    IsBusy="{Binding Path=IsBusyIndicator, Mode=TwoWay}" Header="Sending..." >
+        </syncfusion:SfBusyIndicator>
+
     </Grid>
+    
+
 </UserControl>

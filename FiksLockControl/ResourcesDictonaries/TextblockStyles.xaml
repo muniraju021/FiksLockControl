@@ -76,4 +76,9 @@
         <Setter Property="FontFamily" Value="/Assets/Sync FontIcons.ttf#Sync FontIcons" />
         <Setter Property="Foreground" Value="White"></Setter>
     </Style>
+
+    <Style x:Key="SubHeaderBlockStyle" TargetType="{x:Type TextBlock}">
+        <Setter Property="FontFamily" Value="Champagne &amp; Limousines"/>
+        <Setter Property="Foreground" Value="Black"/>
+    </Style>
 </ResourceDictionary>

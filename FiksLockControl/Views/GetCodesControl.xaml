@@ -103,30 +103,15 @@
                             </StackPanel>
                             <Separator Margin="15,10,15,5"/>
                             <StackPanel Orientation="Horizontal" Margin="15,10,5,0" HorizontalAlignment="Left">
-                                <!--<Button Margin="0,0,5,0" x:Name="GenerateButton" Click="GenerateButton_Click" HorizontalAlignment="Left" 
-                                    Width="95">
-                                    <StackPanel Orientation="Horizontal" Margin="-10,0,-9,0">
-                                        <materialDesign:PackIcon Kind="ClipboardListOutline" Width="15" Height="15" VerticalAlignment="Center" Margin="0,0,3,0" Foreground="White"/>
-                                        <TextBlock HorizontalAlignment="Center" Text="Get Code" 
-                                                   FontFamily="Champagne &amp; Limousines" Foreground="White" FontSize="14"/>
-                                    </StackPanel>
-                                </Button>
-                                <Button x:Name="btnOpenLock" Click="btnOpenLock_Click" HorizontalAlignment="Center" 
-                                   Width="95">
-                                    <StackPanel Orientation="Horizontal" Margin="-13,0,-9,0" >
-                                        <materialDesign:PackIcon Kind="lock" VerticalAlignment="Center" Width="15" Height="15" Margin="0,0,3,0" Foreground="White"/>
-                                        <TextBlock HorizontalAlignment="Center" Text="Open Lock" 
-                                                   FontFamily="Champagne &amp; Limousines" Foreground="White" FontSize="14"/>
-                                    </StackPanel>
-                                </Button>-->
-                                <Button x:Name="GenerateButton" Style="{StaticResource MaterialDesignRaisedAccentButton}"
-                                    materialDesign:ButtonAssist.CornerRadius="15" Click="GenerateButton_Click"
+
+                                <Button x:Name="GenerateButton" Style="{StaticResource MaterialDesignCustomButton}"
+                                    materialDesign:ButtonAssist.CornerRadius="5" Click="GenerateButton_Click"
                                         HorizontalAlignment="Left"  Margin="0,0,5,0" Width="120"
                                     ToolTip="Generate Lock Code">
-                                    <Button.Resources>
+                                    <!--<Button.Resources>
                                         <SolidColorBrush x:Key="SecondaryAccentBrush" Color="#2AAAFF"/>
                                         <SolidColorBrush x:Key="SecondaryAccentForegroundBrush" Color="#2A7FFF"/>
-                                    </Button.Resources>
+                                    </Button.Resources>-->
                                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="-9,0,-9,0" >
                                         <materialDesign:PackIcon Kind="ClipboardListOutline" Width="15" Height="15" 
                                                 VerticalAlignment="Center" Margin="0,0,3,0" Foreground="White"/>
@@ -134,20 +119,7 @@
                                                    FontFamily="Champagne &amp; Limousines" Foreground="White" FontSize="14"/>
                                     </StackPanel>
                                 </Button>
-                                <!--<Button x:Name="btnOpenLock" Style="{StaticResource MaterialDesignRaisedAccentButton}"
-                                    materialDesign:ButtonAssist.CornerRadius="15" Click="btnOpenLock_Click"
-                                        HorizontalAlignment="Left"  Margin="0,0,5,0" Width="100"
-                                    ToolTip="Sends SMS to Open Lock">
-                                    <Button.Resources>
-                                        <SolidColorBrush x:Key="SecondaryAccentBrush" Color="#2AAAFF"/>
-                                        <SolidColorBrush x:Key="SecondaryAccentForegroundBrush" Color="#2A7FFF"/>
-                                    </Button.Resources>
-                                    <StackPanel Orientation="Horizontal" Margin="-9,0,-9,0"  >
-                                        <materialDesign:PackIcon Kind="lock" Width="15" Height="15" VerticalAlignment="Center" Margin="0,0,3,0" Foreground="White"/>
-                                        <TextBlock HorizontalAlignment="Center" Text="Open Lock" 
-                                                   FontFamily="Champagne &amp; Limousines" Foreground="White" FontSize="14"/>
-                                    </StackPanel>
-                                </Button>-->
+
                             </StackPanel>
                         </StackPanel>
 
@@ -158,62 +130,40 @@
 
     </UserControl.Resources>
 
-    <Grid>        
+    <Grid>
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"></RowDefinition>
-                <RowDefinition Height="9*"></RowDefinition>
+                <RowDefinition Height="23*"></RowDefinition>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
-            <Border BorderBrush="Black" BorderThickness="0" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2">
-                <Grid VerticalAlignment="Center">
-                    <Border BorderBrush="#54FED4" BorderThickness="1" CornerRadius="5">
-                        <StackPanel Orientation="Horizontal" Background="#54FED4"  >
-                            <materialDesign:PackIcon Kind="InformationVariant" Height="25" Width="25" Margin="10" Foreground="White" Background="#31577E"/>
-                            <TextBlock Text="Generate Codes" Style="{StaticResource LabelTextBlockStyle}" 
-                                       VerticalAlignment="Center" Foreground="Gray" HorizontalAlignment="Center"/>
-                        </StackPanel>
-                    </Border>
-                </Grid>
-            </Border>
-
-            <Border BorderBrush="Black" BorderThickness="0" CornerRadius="20" Margin="0,5,0,0" Grid.Row="1" Grid.Column="0">
-                <Grid >
-                    <Border BorderBrush="#54FED4" BorderThickness="1" CornerRadius="5">
-                        <ListBox ItemsSource="{Binding ListLockInfoColl}" BorderBrush="Transparent" BorderThickness="0"
+           
+            <Grid Grid.Row="0">
+                <StackPanel Background="#FFB12F" Orientation="Horizontal" Margin="-10,-10,-10,0" >
+                    <TextBlock Style="{StaticResource SubHeaderBlockStyle}" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="10,0,0,0" FontSize="20" Foreground="Black">Generate Codes</TextBlock>                    
+                </StackPanel>
+            </Grid>
+            <Grid Grid.Row="1">
+                <Border BorderBrush="Transparent" BorderThickness="1" CornerRadius="5">
+                    <ListBox ItemsSource="{Binding ListLockInfoColl}" BorderBrush="Transparent" BorderThickness="0"
                                  ItemTemplate="{StaticResource ListboxTemplate}" 
                                  ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                                  ScrollViewer.VerticalScrollBarVisibility="Auto"    
-                                 x:Name="lstLockDashboard" Background="#54FED4"
+                                 x:Name="lstLockDashboard" Background="#FFCFCFCF"
                                 >
-                        </ListBox>
-                    </Border>
-                </Grid>
-            </Border>
-
-            <!--<Border BorderBrush="Black" BorderThickness="0" Margin="0,5,0,0" Grid.Row="2" Grid.Column="1">
-                        <Grid Background="#00FFD4">
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="*"></RowDefinition>
-                                <RowDefinition Height="16*"></RowDefinition>
-                            </Grid.RowDefinitions>
-
-                            <StackPanel Grid.Row="1">
-
-                            </StackPanel>
-                        </Grid>
-                    </Border>-->
-
-            <syncfusion:SfBusyIndicator x:Name="BusyIndicator" VerticalAlignment="Bottom" 
-                   HorizontalAlignment="Center" Margin="0,350,0,0" Width="60" Height="50"
-                    AnimationType="Ripple" Foreground="#FF8522BD" Background="Transparent" ViewboxHeight="30"
-                    IsBusy="{Binding Path=IsBusyIndicator}" Header="Loading..." >
-            </syncfusion:SfBusyIndicator>
-
+                    </ListBox>
+                </Border>
+            </Grid>
         </Grid>
-        
+
+        <syncfusion:SfBusyIndicator x:Name="BusyIndicator" VerticalAlignment="Bottom" 
+                   HorizontalAlignment="Center" Margin="0,0,40,350" Width="90" Height="50"
+                    AnimationType="Ripple" Foreground="#FF8522BD" Background="Transparent" ViewboxHeight="30"
+                    IsBusy="{Binding Path=IsBusyIndicator, Mode=TwoWay}" Header="Generating..." >
+        </syncfusion:SfBusyIndicator>
+
     </Grid>
 
 </UserControl>

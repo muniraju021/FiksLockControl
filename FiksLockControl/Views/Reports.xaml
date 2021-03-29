@@ -14,9 +14,9 @@
         <Style TargetType="syncfusion:GridHeaderCellControl" x:Key="headerStyle">
             <Setter Property="FontWeight" Value="Light"/>
             <Setter Property="Height" Value="50"/>
-            <Setter Property="FontSize" Value="14"/>
-            <Setter Property="Background" Value="#F64E51"/>
-            <Setter Property="Foreground" Value="Black"/>
+            <Setter Property="FontSize" Value="18"/>
+            <Setter Property="Background" Value="#464646"/>
+            <Setter Property="Foreground" Value="#FFB12F"/>
             <Setter Property="FontFamily" Value="Champagne &amp; Limousines"/>
             <Setter Property="VerticalAlignment" Value="Center"/>
             <Setter Property="Margin" Value="0"/>
@@ -52,55 +52,55 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"></RowDefinition>
-            <RowDefinition Height="7*"></RowDefinition>
+            <RowDefinition Height="22*"></RowDefinition>
         </Grid.RowDefinitions>
 
-        <Border BorderBrush="#54FED4" BorderThickness="0" CornerRadius="5" Grid.Row="0" Grid.Column="0">
-            <Grid Margin="0,0,0,5" Grid.Row="0">
-                <Border BorderBrush="#54FED4" BorderThickness="1" CornerRadius="5">
-                    <StackPanel Background="#54FED4" Orientation="Horizontal">
-                        <TextBlock Style="{StaticResource MessageTextBlockStyle}" Margin="10" FontSize="24" VerticalAlignment="Center">Vehicle No:</TextBlock>
-                        <ComboBox Margin="15 0 0 0"  Width="200" Height="40" FontFamily="Champagne &amp; Limousines" Foreground="Black" FontSize="15"
-                                  ItemsSource="{Binding LstVehicleNo}" 
-                                  SelectedItem="{Binding SelectedVehNo, Mode=TwoWay}">
-                        </ComboBox>
-                        <Button Width="120" Margin="20 0 0 0" x:Name="btnGenerateReport" Click="btnGenerateReport_Click"
-                            Style="{StaticResource MaterialDesignRaisedAccentButton}"
-                                materialDesign:ButtonAssist.CornerRadius="15" HorizontalAlignment="Center" 
-                            VerticalAlignment="Center">
-                            <Button.Resources>
-                                <SolidColorBrush x:Key="SecondaryAccentBrush" Color="#2AAAFF"/>
-                                <SolidColorBrush x:Key="SecondaryAccentForegroundBrush" Color="#2A7FFF"/>
-                            </Button.Resources>
-                            <StackPanel Orientation="Horizontal">
-                                <materialDesign:PackIcon Kind="Report" VerticalAlignment="Center" Width="15" Height="15" Margin="0,0,3,0" Foreground="White"/>
-                                <TextBlock HorizontalAlignment="Center" Text="Generate" 
-                            FontFamily="Champagne &amp; Limousines" Foreground="White" FontSize="12"/>                                
-                            </StackPanel>
-                        </Button>
-                        <Button Width="130" Margin="20 0 0 0" x:Name="btnExportReport" Click="btnExportReport_Click"
-                            Style="{StaticResource MaterialDesignRaisedAccentButton}"
-                                materialDesign:ButtonAssist.CornerRadius="15" HorizontalAlignment="Center" 
-                            VerticalAlignment="Center">
-                            <Button.Resources>
-                                <SolidColorBrush x:Key="SecondaryAccentBrush" Color="#2AAAFF"/>
-                                <SolidColorBrush x:Key="SecondaryAccentForegroundBrush" Color="#2A7FFF"/>
-                            </Button.Resources>
-                            <StackPanel Orientation="Horizontal">
-                                <materialDesign:PackIcon Kind="Export" VerticalAlignment="Center" Width="15"  Height="15" Margin="0,0,3,0" Foreground="White"/>
-                                <TextBlock HorizontalAlignment="Center" Text="Export to Excel" 
-                                    FontFamily="Champagne &amp; Limousines" Foreground="White" FontSize="12"/>
-                            </StackPanel>
-                        </Button>
-                    </StackPanel>
-                </Border>
-            </Grid>
-        </Border>
+        <Grid Grid.Row="0">
+            <StackPanel Background="#FFB12F" Orientation="Horizontal" Margin="-10,-10,-10,0" >
+                <TextBlock Style="{StaticResource SubHeaderBlockStyle}" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="10,0,0,0" FontSize="20" Foreground="Black">Reports</TextBlock>
+            </StackPanel>
+        </Grid>
 
-        <Grid Margin="0,5,0,0" Height="580" Grid.Row="1" VerticalAlignment="Top">
-            <Border BorderBrush="#54FED4" BorderThickness="1" CornerRadius="5">
-                <StackPanel Background="#54FED4" Margin="5">
-                    <syncfusion:SfDataGrid x:Name="datagrid"   
+        <Grid Grid.Row="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="10*"></RowDefinition>
+            </Grid.RowDefinitions>
+            <Grid Margin="-9,3,-9,0" Grid.Row="0" Background="#FFFFFF">
+                <StackPanel Background="#FFFFFF" Orientation="Horizontal" Margin="10,0,0,0">
+                    <!--TextBlock Style="{StaticResource MessageTextBlockStyle}" Margin="10" FontSize="18" VerticalAlignment="Center">Vehicle No:</TextBlock>-->
+                    <ComboBox Margin="15 0 0 0"  Width="200" Height="40" FontFamily="Champagne &amp; Limousines" Foreground="Black" FontSize="18"
+                                  ItemsSource="{Binding LstVehicleNo}" Style="{StaticResource MaterialDesignComboBox}"
+                                   materialDesign:HintAssist.Hint="Vehicle No" IsEditable="True"
+                                  SelectedItem="{Binding SelectedVehNo, Mode=TwoWay}">
+                    </ComboBox>
+                    <Button Width="140" Margin="20 0 0 0" x:Name="btnGenerateReport" Click="btnGenerateReport_Click"
+                            Style="{StaticResource MaterialDesignCustomButton}"
+                                materialDesign:ButtonAssist.CornerRadius="5" HorizontalAlignment="Center" 
+                            VerticalAlignment="Center">                        
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="Report" VerticalAlignment="Center" Width="15" Height="20" Margin="-5,0,5,0" Foreground="White"/>
+                            <TextBlock HorizontalAlignment="Center" Text="Generate" VerticalAlignment="Center"
+                            FontFamily="Champagne &amp; Limousines" Foreground="White" FontSize="14"/>
+                        </StackPanel>
+                    </Button>
+                    <Button Width="140" Margin="20 0 0 0" x:Name="btnExportReport" Click="btnExportReport_Click"
+                            Style="{StaticResource MaterialDesignCustomButton}"
+                                materialDesign:ButtonAssist.CornerRadius="5" HorizontalAlignment="Center" 
+                            VerticalAlignment="Center">                        
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="Export" VerticalAlignment="Center" Width="15"  Height="20" Margin="-5,0,3,0" Foreground="White"/>
+                            <TextBlock HorizontalAlignment="Center" Text="Export to Excel" VerticalAlignment="Center"
+                                    FontFamily="Champagne &amp; Limousines" Foreground="White" FontSize="14"/>
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
+            </Grid>
+
+            <Grid Margin="-9,3,-9,0" Height="660" Grid.Row="1" VerticalAlignment="Top">
+                <Border BorderBrush="#54FED4" BorderThickness="1">
+                    <StackPanel Background="#FFFFFF">
+                        <syncfusion:SfDataGrid x:Name="datagrid"   
                                HeaderStyle="{StaticResource headerStyle}"
                                AllowDraggingColumns="True"                                   
                                AutoGenerateColumns="False"
@@ -109,23 +109,24 @@
                                ColumnSizer="Star"       
                                ScrollViewer.VerticalScrollBarVisibility="Disabled"
                                ItemsSource="{Binding ElementName=dataPager,Path=PagedSource}">
-                        <syncfusion:SfDataGrid.Columns>
-                            <syncfusion:GridTextColumn MappingName="LockStatus" HeaderText="Lock Status" />
-                            <syncfusion:GridDateTimeColumn MappingName="LastUpdatedTime" AllowNullValue="True"
+                            <syncfusion:SfDataGrid.Columns>
+                                <syncfusion:GridTextColumn MappingName="LockStatus" HeaderText="Lock Status" />
+                                <syncfusion:GridDateTimeColumn MappingName="LastUpdatedTime" AllowNullValue="True"
                                     Pattern="CustomPattern"  CustomPattern="dd-MMM-yyyy hh:mm:ss" HeaderText="Update Time" >
-                            </syncfusion:GridDateTimeColumn>
-                        </syncfusion:SfDataGrid.Columns>
-                    </syncfusion:SfDataGrid>
+                                </syncfusion:GridDateTimeColumn>
+                            </syncfusion:SfDataGrid.Columns>
+                        </syncfusion:SfDataGrid>
 
-                    <syncfusion:SfDataPager x:Name="dataPager"
+                        <syncfusion:SfDataPager x:Name="dataPager"
                                     Grid.Row="1"
                                     PageSize="20"
                             Source="{Binding LockHistoryDetails}"/>
 
-                </StackPanel>
-            </Border>
+                    </StackPanel>
+                </Border>
+            </Grid>
         </Grid>
-
+        
         <syncfusion:SfBusyIndicator x:Name="BusyIndicator" VerticalAlignment="Bottom" 
                    HorizontalAlignment="Center" Margin="0,380,0,0" Width="60" Height="50"
                     AnimationType="Ripple" Foreground="#FF8522BD" Background="Black" ViewboxHeight="30"

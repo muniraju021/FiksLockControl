@@ -2,9 +2,6 @@
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace LockServices.Lib.DataObjects
 {
@@ -32,6 +29,7 @@ namespace LockServices.Lib.DataObjects
         public DateTime? StartDate { get; set; }
 
         [JsonProperty("tagDate")]
+        [JsonConverter(typeof(CustomDateTimeConverter))]
         public DateTime? TagDate { get; set; }
 
         [JsonProperty("lockEndDate")]
@@ -120,6 +118,8 @@ namespace LockServices.Lib.DataObjects
                     return string.Empty;
             }
         }
+
+        public DialogHostType DialogHostTypeInstance; 
     }
 
     public class LockCodeList
@@ -140,5 +140,12 @@ namespace LockServices.Lib.DataObjects
         public DateTime? LastUpdatedTime { get; set; }
 
         public string Status { get { return LockStatus + " " + LastUpdatedTime?.ToString("yyyy-MM-dd HH:mm:ss"); } }
+    }
+
+    public enum DialogHostType
+    {
+        OpenLock,
+        GenericeMessageYesOrNo,
+        LockHistory
     }
 }

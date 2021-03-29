@@ -14,6 +14,7 @@ using FiksLockControl.Extensions;
 using System.Windows;
 using MaterialDesignThemes.Wpf;
 using FiksLockControl.Views;
+using log4net;
 
 namespace FiksLockControl.Model
 {
@@ -36,19 +37,8 @@ namespace FiksLockControl.Model
                 RaisePropertyChanged("IsBusyIndicator");
             }
         }
-
-        //private bool _isDialogHostOpen;
-        //public bool IsDialogHostOpen
-        //{
-        //    get { return _isDialogHostOpen; }
-        //    set
-        //    {
-        //        _isDialogHostOpen = value;
-        //        RaisePropertyChanged("IsDialogHostOpen");
-        //    }
-        //}
+                
         public ICommand ShowDialogCommand { get; }
-
 
         private ObservableCollection<LockInformationObject> _listLockInfoColl = new ObservableCollection<LockInformationObject>();
         public ObservableCollection<LockInformationObject> ListLockInfoColl
@@ -63,10 +53,9 @@ namespace FiksLockControl.Model
         }
 
 
-        public GenerateCodesViewModel(ILockActionServices lockActionServices, ICacheService cacheService) : base(cacheService)
+        public GenerateCodesViewModel(ILockActionServices lockActionServices, ICacheService cacheService,ILog logger) : base(cacheService,logger)
         {
             _lockActionServices = lockActionServices;
-            IsBusyIndicator = true;
             ShowDialogCommand = new RelayCommand(OnShowDialog);
         }
                
@@ -100,11 +89,12 @@ namespace FiksLockControl.Model
             }
             catch (Exception ex)
             {
-                throw ex;
+                Logger.Error($"Error in GetVehiclesTagged - ", ex);
+                throw;
             }
             finally
             {
-                IsBusyIndicator = false;
+
             }
             
         }
@@ -133,6 +123,7 @@ namespace FiksLockControl.Model
             }
             catch (Exception ex)
             {
+                Logger.Error($"Error in GenerateCode - ", ex);
                 throw;
             }
             finally
@@ -146,12 +137,21 @@ namespace FiksLockControl.Model
 
         public async Task<List<LockStatusDO>> GetLockHistory(string vehicleNo)
         {
-            var userInfo = _cacheService.GetUserCredentials();
-            if(userInfo != null)
+            try
             {
-                return await _lockActionServices.GetLockHistory(userInfo.EmailId, vehicleNo);
+                var userInfo = _cacheService.GetUserCredentials();
+                if (userInfo != null)
+                {
+                    return await _lockActionServices.GetLockHistory(userInfo.EmailId, vehicleNo);
+                }
+                return default(List<LockStatusDO>);
             }
-            return default(List<LockStatusDO>);
+            catch (Exception ex)
+            {
+                Logger.Error($"Error in GetLockHistory - ", ex);
+                throw;
+            }
+            
         }
 
         public void OpenLock(string code,string lockNo,ref ApiResponseMessage objApiRespMessage)
@@ -161,8 +161,9 @@ namespace FiksLockControl.Model
                 IsBusyIndicator = true;
                 _lockActionServices.OpenLock(code, lockNo, ref objApiRespMessage);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                Logger.Error($"Error in OpenLock - ", ex);
                 throw;
             }
             finally
@@ -171,16 +172,30 @@ namespace FiksLockControl.Model
             }
         }
 
-        private async void OnShowDialog(object obj)
+        private void OnShowDialog(object obj)
         {
-            IsDialogHostOpen = true;
-            var msgBox = new MessageBoxTemplate();
-            var model = msgBox.DataContext as MessageBoxViewModel;
-            var lockObj = obj as LockInformationObject;
-            model.MessageContent = $"Code Generation Successfull Code: ";
-            model.LockCode = lockObj.LatestLockCode;
-            model.LockPhoneNo = lockObj.LockPhNo;
-            await DialogHost.Show(msgBox);
+            try
+            {
+                IsDialogHostOpen = true;
+                if (obj is LockInformationObject)
+                {
+                    var msgBox = new MessageBoxTemplate();
+                    var model = msgBox.DataContext as MessageBoxViewModel;
+                    var lockObj = obj as LockInformationObject;
+                    model.MessageContent = $"Code Generation Successfull...";
+                    model.MessageBoxTitle = "Open Lock - GetCodes";
+                    model.LockCode = lockObj.LatestLockCode;
+                    model.LockPhoneNo = lockObj.LockPhNo;
+                    DialogHost.Show(msgBox);
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.Error($"Error in OnShowDialog - ", ex);
+                throw;
+            }
+            
+           
         }
 
     }

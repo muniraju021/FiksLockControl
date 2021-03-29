@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using System.IO.Compression;
 using FiksLockControl.Extensions;
 using log4net;
+using LockServices.Lib.GsmMessages;
 
 namespace FiksLockControl.Model
 {
@@ -28,12 +29,15 @@ namespace FiksLockControl.Model
         private readonly string ReleaseUpdateDestinationPath = ConfigurationManager.AppSettings["ReleaseUpdateDestinationPath"];
         private readonly bool IUpdateAvailable = Convert.ToBoolean(ConfigurationManager.AppSettings["IUpdateAvailable"]);
 
-        public LoginViewModel(ILockActionServices lockActionServices, IFtpService ftpService, IVersionCheck versionCheck,ILog logger)
+        private readonly IReceiveSmsMessage _receiveSmsMessage;
+
+        public LoginViewModel(ILockActionServices lockActionServices, IReceiveSmsMessage recieveSmsMsg, IFtpService ftpService, IVersionCheck versionCheck,ILog logger)
         {
             _lockActionServices = lockActionServices;
             _ftpService = ftpService;
             _versionCheck = versionCheck;
             _logger = logger;
+            _receiveSmsMessage = recieveSmsMsg;
         }
 
         private bool _isBusyIndicator;
@@ -79,9 +83,7 @@ namespace FiksLockControl.Model
             else
             {
                 _logger.Info($"LoginViewModel: No Application updates available");
-            }
-
-
+            }            
         }
 
         public async Task<bool> Login(string userName, string password)
@@ -91,12 +93,19 @@ namespace FiksLockControl.Model
             {
                 IsBusyIndicator = true;
                 isLoggedIn = await _lockActionServices.Login(userName, password);
-
-                Task.Factory.StartNew(() =>
+                if (isLoggedIn)
                 {
-                    if (IUpdateAvailable)
-                        CheckForUpdates();
-                });
+                    _receiveSmsMessage.InitializeSerilaComm();
+                }
+
+                //if (IUpdateAvailable)
+                //    CheckForUpdates();
+
+                    //Task.Factory.StartNew(async () =>
+                    //{
+                    //    if (IUpdateAvailable)
+                    //        await CheckForUpdates();
+                    //});
             }
             catch (Exception ex)
             {

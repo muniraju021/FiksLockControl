@@ -11,6 +11,7 @@ using log4net;
 using System.Configuration;
 using LockServices.Lib.Cache;
 using System.IO;
+using System.Net;
 
 namespace LockServices.Lib.WebClientApi
 {
@@ -119,6 +120,7 @@ namespace LockServices.Lib.WebClientApi
                 password = password
             });
             var stringContent = new StringContent(json, UnicodeEncoding.UTF8, "application/json");
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
 
             var response = await _httpClient.PostAsync(@"login", stringContent);
             if(response.IsSuccessStatusCode)

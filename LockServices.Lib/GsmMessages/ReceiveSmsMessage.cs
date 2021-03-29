@@ -29,15 +29,15 @@ namespace LockServices.Lib.GsmMessages
             _gsmMessagingService = gsmMessagingService;
             _logger = logger;
             _smsMessageService = smsMsgService;
-            InitializeSerilaComm(); 
         }
-
+        
         public void InitializeSerilaComm()
         {
             try
             {
                 _logger.Info($"ReceiveSmsMessage: InitializeSerilaComm - Started..");
                 _gsmMessagingService.InitializeSerialConnection(ProcessSerialPortMessages);
+                _smsMessageService.ProcessReceivedMessages();
                 _gsmMessagingService.SendMessage(_smsMessageService.GetSelectStorageCommand());
                 _gsmMessagingService.SendMessage(_smsMessageService.GetMessageAllCommand());
                 _logger.Info($"ReceiveSmsMessage: InitializeSerilaComm - Completed..");

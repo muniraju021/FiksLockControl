@@ -15,6 +15,7 @@ namespace LockServices.Lib.GsmMessages
     {
         void SendLockCodeMessage(string code, string phoneNo, ref ApiResponseMessage obApiResponseMsg);
         //void ProcessReceivedMessage(string message);
+        void SendReadAllMessageCommand();
     }
 
     public class SendSmsMessages : ISendSmsMessages,IDisposable
@@ -35,11 +36,13 @@ namespace LockServices.Lib.GsmMessages
         public static ConcurrentQueue<string> ReceivedMessages = new ConcurrentQueue<string>();
         private static long _gsmMessageReceiveTimeoutInMs = 20000;
         private readonly ILog _logger;
+        private readonly ISmsMessageService _smsMessageService;
 
-        public SendSmsMessages(IGsmMessagingService gsmMessagingService,ILog logger)
+        public SendSmsMessages(IGsmMessagingService gsmMessagingService,ILog logger,ISmsMessageService smsMessageService)
         {
             _gsmMessagingService = gsmMessagingService;
             _logger = logger;
+            _smsMessageService = smsMessageService;
         }
 
         public void SendLockCodeMessage(string code, string phoneNo, ref ApiResponseMessage obApiResponseMsg)
@@ -51,7 +54,7 @@ namespace LockServices.Lib.GsmMessages
         
         private void SendLockCodeMessage(ref ApiResponseMessage obApiResponseMsg)
         {
-            if(_gsmMessagingService.IsSmsConnectionActive())
+            if(!_gsmMessagingService.IsSmsConnectionActive())
             {
                 _logger.Warn($"SendSmsMessages: SendLockCodeMessage - Initalizing SerialPort Connection");
                 _gsmMessagingService.InitializeSerialConnection(ReceiveSmsMessage.ProcessSerialPortMessages);
@@ -87,6 +90,20 @@ namespace LockServices.Lib.GsmMessages
             }
             if(string.IsNullOrWhiteSpace(obApiResponseMsg.StatusMessage))
                 obApiResponseMsg.ErrorMessage = "SMS Sending Timeout";
+
+        }
+
+        public void SendReadAllMessageCommand()
+        {
+            _logger.Info($"SendSmsMessages: Read All Messages From Device - Started");
+            if (!_gsmMessagingService.IsSmsConnectionActive())
+            {
+                _logger.Warn($"SendSmsMessages: ReadAllMessagesFromDevice - Initalizing SerialPort Connection");
+                _gsmMessagingService.InitializeSerialConnection(ReceiveSmsMessage.ProcessSerialPortMessages);
+            }
+            _gsmMessagingService.SendMessage(_smsMessageService.GetSelectStorageCommand());
+            _gsmMessagingService.SendMessage(_smsMessageService.GetMessageAllCommand());
+            _logger.Info($"SendSmsMessages: Read All Messages From Device - Complete");
 
         }
 

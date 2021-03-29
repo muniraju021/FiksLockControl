@@ -40,7 +40,7 @@ namespace FiksLockControl.Views
 
                 if (await loginViewModel.Login(userName, pwd))
                 {
-                    var form = new MainPage();
+                    var form = new MainPage();                    
                     form.Show();
                     this.Close();
                 }
@@ -59,6 +59,14 @@ namespace FiksLockControl.Views
         private void btnExit_Click(object sender, RoutedEventArgs e)
         {
             this.Close();
+        }
+
+        private void BtnLogin_KeyDown(object sender, KeyEventArgs e)
+        {
+            if(e.Key == Key.Return)
+            {
+                BtnLogin_Click(sender, null);
+            }
         }
     }
 }

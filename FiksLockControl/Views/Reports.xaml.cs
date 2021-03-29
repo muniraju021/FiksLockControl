@@ -47,7 +47,6 @@ namespace FiksLockControl.Views
 
         private void btnExportReport_Click(object sender, RoutedEventArgs e)
         {
-
             try
             {
                 var options = new ExcelExportingOptions();
@@ -120,7 +119,6 @@ namespace FiksLockControl.Views
                 e.CellStyle.BackGroundBrush = new SolidColorBrush(Colors.LightSkyBlue);
                 e.Handled = true;
             }
-
             else if (e.CellType == ExportCellType.GroupCaptionCell)
             {
                 e.CellStyle.BackGroundBrush = new SolidColorBrush(Colors.Wheat);

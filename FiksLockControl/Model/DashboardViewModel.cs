@@ -68,7 +68,8 @@ namespace FiksLockControl.Model
             }
         }
 
-        public DashboardViewModel(ILockActionServices lockActionServices, ICacheService cacheService, ILog logger) : base(cacheService)
+        public DashboardViewModel(ILockActionServices lockActionServices, ICacheService cacheService, ILog logger)
+            : base(cacheService,logger)
         {
             _lockActionServices = lockActionServices;
             IsBusyIndicator = true;
@@ -85,6 +86,7 @@ namespace FiksLockControl.Model
         {
             try
             {
+                _updateProcessStarted = true;
                 Task.Factory.StartNew(async () =>
                 {
                     while (_updateProcessStarted)
@@ -120,7 +122,6 @@ namespace FiksLockControl.Model
             {
                 IsBusyIndicator = false;
             }
-
         }
 
         public void OpenLock(string code, string lockNo, ref ApiResponseMessage objApiRespMessage)
@@ -140,15 +141,29 @@ namespace FiksLockControl.Model
             }
         }
 
-        private async void OnShowDialog(object obj)
+        private void OnShowDialog(object obj)
         {
             IsDialogHostOpen = true;
-            var objLockHistoryView = new LockHistoryView();
-            var viewModel = objLockHistoryView.DataContext as LockHistoryViewModel;
-            var lockObj = obj as LockInformationObject;
-            viewModel.GetLockHistory(lockObj.EmailId, lockObj.VehicleNumber);
-            viewModel.LastLockCode = lockObj.LatestLockCode;
-            await DialogHost.Show(objLockHistoryView);
+            if ((obj as LockInformationObject).DialogHostTypeInstance == DialogHostType.LockHistory)
+            {
+                var objLockHistoryView = new LockHistoryView();
+                var viewModel = objLockHistoryView.DataContext as LockHistoryViewModel;
+                var lockObj = obj as LockInformationObject;
+                viewModel.GetLockHistory(lockObj.EmailId, lockObj.VehicleNumber);
+                viewModel.LastLockCode = lockObj.LatestLockCode;
+                DialogHost.Show(objLockHistoryView);
+            }
+            else if ((obj as LockInformationObject).DialogHostTypeInstance == DialogHostType.OpenLock)
+            {
+                var msgBox = new MessageBoxTemplate();
+                var model = msgBox.DataContext as MessageBoxViewModel;
+                var lockObj = obj as LockInformationObject;
+                model.MessageContent = $"Please Verify the Code and Confirm to Open Lock";
+                model.MessageBoxTitle = "Open Lock - Dashboard";
+                model.LockCode = lockObj.LatestLockCode;
+                model.LockPhoneNo = lockObj.LockPhNo;
+                DialogHost.Show(msgBox);
+            }
         }
 
         public void Dispose()

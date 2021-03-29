@@ -1,4 +1,5 @@
 ﻿using LockServices.Lib.Cache;
+using log4net;
 using Syncfusion.Windows.Shared;
 using System;
 using System.Collections.Generic;
@@ -11,10 +12,12 @@ namespace FiksLockControl.Model
     public class BaseViewModel : NotificationObject
     {
         protected readonly ICacheService _cacheService;
+        protected readonly ILog Logger;
 
-        public BaseViewModel(ICacheService cacheService)
+        public BaseViewModel(ICacheService cacheService,ILog logger)
         {
             _cacheService = cacheService;
+            Logger = logger;
             PopulateUserEmail();
         }
 

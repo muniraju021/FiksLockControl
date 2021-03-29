@@ -54,7 +54,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>Images\icon.ico</ApplicationIcon>
+    <ApplicationIcon>logo.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="DeltaCompressionDotNet, Version=1.1.0.0, Culture=neutral, PublicKeyToken=1d14d6e5194e7f4a, processorArchitecture=MSIL">
@@ -189,6 +189,7 @@
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Model\AdminSettingsModel.cs" />
     <Compile Include="Model\ApplicationViewModel.cs" />
     <Compile Include="Model\BaseViewModel.cs" />
     <Compile Include="Model\DashboardViewModel.cs" />
@@ -196,13 +197,18 @@
     <Compile Include="Model\LockModel.cs" />
     <Compile Include="Model\GenerateCodesViewModel.cs" />
     <Compile Include="Model\LoginViewModel.cs" />
+    <Compile Include="Model\GenericMessageBoxViewModel.cs" />
     <Compile Include="Model\MessageBoxViewModel.cs" />
     <Compile Include="Model\ReportViewModel.cs" />
     <Compile Include="NInject\ServiceLocator.cs" />
     <Compile Include="NInject\ServiceModule.cs" />
     <Compile Include="Startup.cs" />
+    <Compile Include="Utilities\Helper.cs" />
     <Compile Include="Views\DashboardView.xaml.cs">
       <DependentUpon>DashboardView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\GenericMessageBoxInfoTemplate.xaml.cs">
+      <DependentUpon>GenericMessageBoxInfoTemplate.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\GetCodesControl.xaml.cs">
       <DependentUpon>GetCodesControl.xaml</DependentUpon>
@@ -213,11 +219,17 @@
     <Compile Include="Views\LoginView.xaml.cs">
       <DependentUpon>LoginView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\GenericMessageBoxTemplate.xaml.cs">
+      <DependentUpon>GenericMessageBoxTemplate.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\MessageBoxTemplate.xaml.cs">
       <DependentUpon>MessageBoxTemplate.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Reports.xaml.cs">
       <DependentUpon>Reports.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Troubleshoot.xaml.cs">
+      <DependentUpon>Troubleshoot.xaml</DependentUpon>
     </Compile>
     <Page Include="MainPage.xaml">
       <SubType>Designer</SubType>
@@ -227,6 +239,10 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="ResourcesDictonaries\ButtonStyles.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="ResourcesDictonaries\TextblockStyles.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -234,6 +250,10 @@
     <Page Include="Views\DashboardView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\GenericMessageBoxInfoTemplate.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\GetCodesControl.xaml">
       <SubType>Designer</SubType>
@@ -247,11 +267,19 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\GenericMessageBoxTemplate.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Views\MessageBoxTemplate.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Reports.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Troubleshoot.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -300,6 +328,8 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="logo.ico" />
+    <Resource Include="Images\logo.ico" />
     <Content Include="ThirdPartyDll\SerialPortComLib.pdb" />
     <Content Include="ThirdPartyDll\Syncfusion.SfBusyIndicator.Wpf.dll" />
     <Resource Include="ThirdPartyDll\Syncfusion.SfBusyIndicator.Wpf.xml" />
@@ -316,9 +346,6 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Images\home.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Images\icon.ico">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Images\logo.png">

@@ -15,8 +15,14 @@
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Primary/MaterialDesignColor.Blue.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Accent/MaterialDesignColor.Indigo.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Button.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Card.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.CheckBox.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Flipper.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Popupbox.xaml" />
                 <ResourceDictionary Source="ResourcesDictonaries\LabelStyles.xaml"></ResourceDictionary>
                 <ResourceDictionary Source="ResourcesDictonaries\TextblockStyles.xaml"></ResourceDictionary>
+                <ResourceDictionary Source="ResourcesDictonaries\ButtonStyles.xaml"></ResourceDictionary>
             </ResourceDictionary.MergedDictionaries>
 
             <ninject:ServiceLocator x:Key="ServiceLocator"></ninject:ServiceLocator>
@@ -26,6 +32,8 @@
             <DataTemplate DataType="{x:Type viewModels:LockHistoryViewModel}"/>
             <DataTemplate DataType="{x:Type viewModels:MessageBoxViewModel}"/>
             <DataTemplate DataType="{x:Type viewModels:ReportViewModel}"/>
+            <DataTemplate DataType="{x:Type viewModels:AdminSettingsModel}"/>
+
 
 
             <!--<Style TargetType="Button">

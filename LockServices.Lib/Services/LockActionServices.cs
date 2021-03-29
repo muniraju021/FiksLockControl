@@ -21,7 +21,7 @@ namespace LockServices.Lib.Services
         private readonly ISendSmsMessages _sendSmsMessages;
         private ILog _logger;
 
-        public LockActionServices(IFiksApi iFiksApi,ICacheService cacheService, ISendSmsMessages sendSmsMessages,ILog logger)
+        public LockActionServices(IFiksApi iFiksApi,ICacheService cacheService, ILog logger, ISendSmsMessages sendSmsMessages)
         {
             _iFiksApi = iFiksApi;
             _iCacheService = cacheService;
@@ -112,12 +112,15 @@ namespace LockServices.Lib.Services
         public async Task<string> UpdateLockStatus(string lockPhoneNo, string status)
         {
             var lstObj = _iCacheService.GetLockInformationByPhoneNo(lockPhoneNo);
+
+
             var userDetails = _iCacheService.GetUserCredentials();
             if(lstObj != null)
             {
                 var res = await _iFiksApi.UpdateLockStatus(userDetails.EmailId, lstObj.LockId, status);
                 return res;
             }
+            _logger.Error($"UpdateLockStatus Failed - LockPhNo:{lockPhoneNo};Status:{status}");
             return default(string);
         }
 
@@ -131,13 +134,26 @@ namespace LockServices.Lib.Services
             try
             {
                 _logger.Info($"LockActionServices: OpenLock - Code:{code} - PhoneNo:{phoneNo}");
-                _sendSmsMessages.SendLockCodeMessage(code.ToString(), phoneNo, ref objApiRespMessage);
+                _sendSmsMessages.SendLockCodeMessage(code.ToString(), phoneNo, ref objApiRespMessage);                
             }
             catch (Exception ex)
             {
                 _logger.Error($"LockActionServices: OpenLock - Exception - {ex}");
                 if (string.IsNullOrWhiteSpace(objApiRespMessage.ErrorMessage))
-                    objApiRespMessage.ErrorMessage = "SMS Sending Failed. Check With Support";
+                    objApiRespMessage.ErrorMessage = "SMS Sending Failed. Try Again!";
+            }
+        }
+
+        public void ReadAllMessages()
+        {
+            try
+            {
+                _sendSmsMessages.SendReadAllMessageCommand();
+            }
+            catch (Exception ex)
+            {
+                _logger.Error($"ReadAllMessages: Error in Sending..", ex);
+                throw ex;
             }
         }
     }

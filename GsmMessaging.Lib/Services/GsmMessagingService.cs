@@ -34,7 +34,6 @@ namespace GsmMessaging.Lib.Services
             catch (Exception ex)
             {
                 _logger.Error($"GsmMessagingService: InitializeSerialConnection - Error in Initializing Serial Comm - Exception:{ex}");
-                throw ex;
             }
             
         }

@@ -31,6 +31,7 @@ namespace FiksLockControl.NInject
             Bind<IGsmMessagingService>().To<GsmMessagingService>().InSingletonScope();
             Bind<IReceiveSmsMessage>().To<ReceiveSmsMessage>().InSingletonScope();
             Bind<ISmsMessageService>().To<SmsMessageService>().InSingletonScope();
+            Bind<IApiService>().To<ApiService>();
             Bind<ILockActionServices>().To<LockActionServices>();
             Bind<IFiksApi>().To<FiksApiClient>().InSingletonScope();
             Bind<ICacheService>().To<CacheManagement>();

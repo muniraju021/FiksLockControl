@@ -1,0 +1,41 @@
+﻿<UserControl x:Class="FiksLockControl.Views.Troubleshoot"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:FiksLockControl.Views"
+             mc:Ignorable="d" 
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:syncfusion="clr-namespace:Syncfusion.Windows.Controls.Notification;assembly=Syncfusion.SfBusyIndicator.WPF"
+             DataContext="{Binding Path=ObjAdminSettingsModel, Source={StaticResource ServiceLocator}}"
+             d:DesignHeight="730" d:DesignWidth="940">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="20*"></RowDefinition>
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="0">
+            <StackPanel Background="#FFB12F" Orientation="Horizontal" Margin="0,0,0,0" >
+                <TextBlock Style="{StaticResource SubHeaderBlockStyle}" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="10,0,0,0" FontSize="20" Foreground="Black">Settings</TextBlock>
+            </StackPanel>
+        </Grid>
+
+        <Grid Grid.Row="1">
+            <StackPanel Margin="50">
+                <Button x:Name="btnReadAllMessages" Style="{StaticResource MaterialDesignCustomButton}"
+                                    materialDesign:ButtonAssist.CornerRadius="5" Click="btnReadAllMessages_Click"
+                                        HorizontalAlignment="Left"  Margin="10" Width="140" Height="100"
+                                    ToolTip="Sends SMS to Open Lock">
+                    <StackPanel Orientation="Horizontal" Margin="-9,0,-9,0"  >
+                        <materialDesign:PackIcon Kind="Sms" Width="15" Height="15" VerticalAlignment="Center" Margin="0,0,3,0" 
+                                                                     Foreground="White"/>
+                        <TextBlock HorizontalAlignment="Center" Text="Read All SMS" 
+                                                   FontFamily="Champagne &amp; Limousines" Foreground="White" FontSize="16"/>
+                    </StackPanel>
+                </Button>
+            </StackPanel>            
+        </Grid>
+        
+    </Grid>
+</UserControl>

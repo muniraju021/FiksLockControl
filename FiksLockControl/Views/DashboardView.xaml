@@ -112,7 +112,7 @@
                             </StackPanel>
                             <StackPanel Grid.Row="1" Margin="15,15,15,0">
                                 <TextBlock  Text="{Binding LockStatus}" Style="{StaticResource CodeTextBlockStyle}"
-                                TextAlignment="Right" FontSize="25" FontWeight="SemiBold" />
+                                TextAlignment="Right" FontSize="20" FontWeight="SemiBold" />
                                 <Label Content="{Binding LockStatusUpdateDateTime}" Margin="0,-2,0,0" HorizontalAlignment="Right" VerticalAlignment="Top" 
                                    Style="{StaticResource ListItemLabelStyle}" FontSize="12"/>
                             </StackPanel>
@@ -127,38 +127,12 @@
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition></ColumnDefinition>
                                 </Grid.ColumnDefinitions>
-                                <!--<Label Content="Lock Status" HorizontalAlignment="Left" VerticalAlignment="Bottom" 
-                                   Style="{StaticResource ListItemLabelStyle}" FontSize="14" 
-                                       Grid.Column="0"/>-->
-
-                                <!--<Border Background="#0d5fa3" Width="auto" BorderBrush="#0d5fa3" HorizontalAlignment="Right" Margin="0,0,5,0" BorderThickness="1" CornerRadius="10" Grid.Column="1">
-                                    <Button x:Name="btnGetLockHistory" HorizontalAlignment="Right" BorderBrush="Transparent" Click="btnGetLockHistory_Click" >
-                                        <Grid>                                            
-                                            <StackPanel Orientation="Horizontal" Margin="0,0,5,0">
-                                                <materialDesign:PackIcon Kind="History" VerticalAlignment="Center" Margin="3,0,3,0" Foreground="White"/>
-                                                <TextBlock HorizontalAlignment="Center" Text="History" FontFamily="Champagne &amp; Limousines" Foreground="White"/>
-                                            </StackPanel>
-                                        </Grid>
-                                    </Button>
-                                </Border>-->
-
-                                <!--<Button Grid.Column="1" Width="100" x:Name="btnGetLockHistory" Click="btnGetLockHistory_Click"
-                                     HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,5,5,0" >
-                                    <StackPanel Orientation="Horizontal" Width="100">
-                                        <materialDesign:PackIcon Kind="History" VerticalAlignment="Center" Margin="0,0,3,0" Foreground="White"/>
-                                        <TextBlock Text="History" FontFamily="Champagne &amp; Limousines" Foreground="White"/>
-                                    </StackPanel>
-                                </Button>-->
 
                                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                                    <Button x:Name="btnOpenLock" Style="{StaticResource MaterialDesignRaisedAccentButton}"
-                                    materialDesign:ButtonAssist.CornerRadius="15" Click="btnOpenLock_Click"
+                                    <Button x:Name="btnOpenLock" Style="{StaticResource MaterialDesignCustomButton}"
+                                    materialDesign:ButtonAssist.CornerRadius="5" Click="btnOpenLock_Click"
                                         HorizontalAlignment="Left"  Margin="0,5,10,0" Width="100"
                                     ToolTip="Sends SMS to Open Lock">
-                                        <Button.Resources>
-                                            <SolidColorBrush x:Key="SecondaryAccentBrush" Color="#2AAAFF"/>
-                                            <SolidColorBrush x:Key="SecondaryAccentForegroundBrush" Color="#2A7FFF"/>
-                                        </Button.Resources>
                                         <StackPanel Orientation="Horizontal" Margin="-9,0,-9,0"  >
                                             <materialDesign:PackIcon Kind="lock" Width="15" Height="15" VerticalAlignment="Center" Margin="0,0,3,0" 
                                                                      Foreground="White"/>
@@ -167,14 +141,10 @@
                                         </StackPanel>
                                     </Button>
 
-                                    <Button x:Name="btnGetLockHistory" Style="{StaticResource MaterialDesignRaisedAccentButton}"
-                                    materialDesign:ButtonAssist.CornerRadius="15" Click="btnGetLockHistory_Click"
+                                    <Button x:Name="btnGetLockHistory" Style="{StaticResource MaterialDesignCustomButton}"
+                                    materialDesign:ButtonAssist.CornerRadius="5" Click="btnGetLockHistory_Click"
                                         HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,5,5,0" Width="100"
                                     ToolTip="Lock History">
-                                        <Button.Resources>
-                                            <SolidColorBrush x:Key="SecondaryAccentBrush" Color="#2AAAFF"/>
-                                            <SolidColorBrush x:Key="SecondaryAccentForegroundBrush" Color="#2A7FFF"/>
-                                        </Button.Resources>
                                         <StackPanel Orientation="Horizontal">
                                             <materialDesign:PackIcon Kind="History" VerticalAlignment="Center" Margin="0,0,3,0" Foreground="White"/>
                                             <TextBlock Text="History" FontFamily="Champagne &amp; Limousines" Foreground="White"/>
@@ -186,30 +156,6 @@
                     </Grid>
                 </Grid>
 
-
-                <!--<Border BorderBrush="Black" BorderThickness="1" Width="180" Height="120">
-                    <StackPanel>
-                        <TextBlock Text="{Binding VehicleNumber}" Margin="5" Foreground="Black" TextAlignment="Center" />
-                        <Separator Margin="5"/>
-                        <Label>Code</Label>
-                        <TextBlock  Text="{Binding LatestLockCode}" Margin="5" Foreground="Black" TextAlignment="Center" />
-                    </StackPanel>
-                </Border>-->
-
-                <!--<StackPanel>
-                    <Border Height="100" Width="100" Background="Red" Panel.ZIndex="1">
-                        <Border.BitmapEffect>
-                            <DropShadowBitmapEffect Color="Black" Direction="270" ShadowDepth="3" Opacity="1" Softness="2" />
-                        </Border.BitmapEffect>
-                    </Border>
-                    <Border Height="100" Width="100" Background="blue" Panel.ZIndex="0">
-                    </Border>
-                    <TextBlock Text="{Binding VehicleNumber}" Margin="5" Foreground="Black" TextAlignment="Center" />
-                    <Separator Margin="5"/>
-                    <Label>Code</Label>
-                    <TextBlock  Text="{Binding LatestLockCode}" Margin="5" Foreground="Black" TextAlignment="Center" />
-                </StackPanel>-->
-
             </Grid>
         </DataTemplate>
 
@@ -218,12 +164,19 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="20*"></RowDefinition>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
 
-        <Grid>
+        <Grid Grid.Row="0">
+            <StackPanel Background="#FFB12F" Orientation="Horizontal" Margin="0,0,0,0" >
+                <TextBlock Style="{StaticResource SubHeaderBlockStyle}" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="10,0,0,0" FontSize="20" Foreground="Black">Dashboard</TextBlock>
+            </StackPanel>
+        </Grid>
+
+        <Grid Grid.Row="1">
             <ListBox ItemsSource="{Binding LstLockModels, Mode=TwoWay}"
                          ItemTemplate="{StaticResource ListboxTemplate}" 
                          ScrollViewer.HorizontalScrollBarVisibility="Disabled"
