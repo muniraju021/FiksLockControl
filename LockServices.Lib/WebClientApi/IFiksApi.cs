@@ -17,7 +17,7 @@ namespace LockServices.Lib.WebClientApi
 
         Task<string> GetCodeApi(string emailId, string vehicleNo);
 
-        Task<List<LockStatusDO>> GetLockHistory(string emailId, string vehicleNo);
+        Task<List<LockStatusDO>> GetLockHistory(string emailId, string vehicleNo,string lockId);
 
         Task<string> UpdateLockStatus(string emailId, string lockId, string status);
 

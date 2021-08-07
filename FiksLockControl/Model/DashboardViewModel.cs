@@ -149,7 +149,7 @@ namespace FiksLockControl.Model
                 var objLockHistoryView = new LockHistoryView();
                 var viewModel = objLockHistoryView.DataContext as LockHistoryViewModel;
                 var lockObj = obj as LockInformationObject;
-                viewModel.GetLockHistory(lockObj.EmailId, lockObj.VehicleNumber);
+                viewModel.GetLockHistory(lockObj.EmailId, lockObj.VehicleNumber,lockObj.LockId);
                 viewModel.LastLockCode = lockObj.LatestLockCode;
                 DialogHost.Show(objLockHistoryView);
             }

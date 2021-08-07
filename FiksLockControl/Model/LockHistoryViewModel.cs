@@ -55,12 +55,12 @@ namespace FiksLockControl.Model
             _logger = logger;
         }
 
-        public async void GetLockHistory(string emailId,string vehicleNumber)
+        public async void GetLockHistory(string emailId,string vehicleNumber,string lockId)
         {
             try
             {
                 VehicleNumber = vehicleNumber;
-                var lockStatusHistory = await _lockActionServices.GetLockHistory(emailId, vehicleNumber);
+                var lockStatusHistory = await _lockActionServices.GetLockHistory(emailId, vehicleNumber, lockId);
 
                 if (lockStatusHistory != null && lockStatusHistory.Count > 0)
                 {

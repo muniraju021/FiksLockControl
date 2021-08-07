@@ -21,7 +21,7 @@ namespace FiksLockControl.Model
     public class GenerateCodesViewModel : BaseViewModel
     {
         private readonly ILockActionServices _lockActionServices;
-        
+
         public string RowCount { get; set; }
         public double ColumnCount => 2;
         private bool _isBusyIndicator;
@@ -37,28 +37,30 @@ namespace FiksLockControl.Model
                 RaisePropertyChanged("IsBusyIndicator");
             }
         }
-                
+
         public ICommand ShowDialogCommand { get; }
 
         private ObservableCollection<LockInformationObject> _listLockInfoColl = new ObservableCollection<LockInformationObject>();
         public ObservableCollection<LockInformationObject> ListLockInfoColl
         {
-            get {
+            get
+            {
                 return _listLockInfoColl;
             }
-            set {
+            set
+            {
                 _listLockInfoColl = value;
                 RaisePropertyChanged("ListLockInfoColl");
             }
         }
 
 
-        public GenerateCodesViewModel(ILockActionServices lockActionServices, ICacheService cacheService,ILog logger) : base(cacheService,logger)
+        public GenerateCodesViewModel(ILockActionServices lockActionServices, ICacheService cacheService, ILog logger) : base(cacheService, logger)
         {
             _lockActionServices = lockActionServices;
             ShowDialogCommand = new RelayCommand(OnShowDialog);
         }
-               
+
 
         public async void GetVehiclesTagged()
         {
@@ -71,7 +73,7 @@ namespace FiksLockControl.Model
                 {
                     lstLockInfo = await _lockActionServices.GetVehiclesTagged(userInfo.EmailId);
                     var lstLockInfoFromDash = await _lockActionServices.GetLockDetailsByEmailId(userInfo.EmailId);
-                    
+
                     if (lstLockInfo != null && lstLockInfo.Count > 0)
                     {
                         var obsColl = new ObservableCollection<LockInformationObject>();
@@ -96,7 +98,7 @@ namespace FiksLockControl.Model
             {
 
             }
-            
+
         }
 
         public async Task<ApiResponseMessage> GenerateCode(string vehicleNo)
@@ -130,19 +132,19 @@ namespace FiksLockControl.Model
             {
                 IsBusyIndicator = false;
             }
-            
+
             return default(ApiResponseMessage);
-            
+
         }
 
-        public async Task<List<LockStatusDO>> GetLockHistory(string vehicleNo)
+        public async Task<List<LockStatusDO>> GetLockHistory(string vehicleNo, string lockId)
         {
             try
             {
                 var userInfo = _cacheService.GetUserCredentials();
                 if (userInfo != null)
                 {
-                    return await _lockActionServices.GetLockHistory(userInfo.EmailId, vehicleNo);
+                    return await _lockActionServices.GetLockHistory(userInfo.EmailId, vehicleNo, lockId);
                 }
                 return default(List<LockStatusDO>);
             }
@@ -151,10 +153,10 @@ namespace FiksLockControl.Model
                 Logger.Error($"Error in GetLockHistory - ", ex);
                 throw;
             }
-            
+
         }
 
-        public void OpenLock(string code,string lockNo,ref ApiResponseMessage objApiRespMessage)
+        public void OpenLock(string code, string lockNo, ref ApiResponseMessage objApiRespMessage)
         {
             try
             {
@@ -194,8 +196,8 @@ namespace FiksLockControl.Model
                 Logger.Error($"Error in OnShowDialog - ", ex);
                 throw;
             }
-            
-           
+
+
         }
 
     }

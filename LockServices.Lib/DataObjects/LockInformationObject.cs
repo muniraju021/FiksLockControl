@@ -60,6 +60,9 @@ namespace LockServices.Lib.DataObjects
         [JsonProperty("overallStatus")]
         public List<LockStatusDO> OverallStatus { get; set; }
 
+        [JsonProperty("lockStatus")]
+        public string LockStatus { get; set; }
+
         public string LatestLockCode
         {
             get
@@ -97,16 +100,16 @@ namespace LockServices.Lib.DataObjects
             }
         }
 
-        public string LockStatus
-        {
-            get
-            {
-                if (OverallStatus != null && OverallStatus.Count > 0)
-                    return OverallStatus[0].LockStatus;
-                else
-                    return string.Empty;
-            }
-        }
+        //public string LockStatus
+        //{
+        //    get
+        //    {
+        //        if (OverallStatus != null && OverallStatus.Count > 0)
+        //            return OverallStatus[0].LockStatus;
+        //        else
+        //            return string.Empty;
+        //    }
+        //}
 
         public string LockStatusUpdateDateTime
         {

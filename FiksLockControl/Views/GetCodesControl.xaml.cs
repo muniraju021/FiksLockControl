@@ -47,17 +47,17 @@ namespace FiksLockControl.Views
         {
             var btn = e.Source as Button;
             try
-            {                
+            {
                 var obj = btn.DataContext as LockInformationObject;
                 btn.IsEnabled = false;
 
-                var currLockStatus = await _viewModel.GetLockHistory(obj.VehicleNumber);
+                var currLockStatus = await _viewModel.GetLockHistory(obj.VehicleNumber, obj.LockId);
                 if (currLockStatus != null && currLockStatus.Count > 0)
                 {
                     int code;
                     if (currLockStatus[0].LockStatus.Contains("LOCK_OPEN") || int.TryParse(currLockStatus[0].LockStatus, out code))
                     {
-                        var dialog = new GenericMessageBoxTemplate();                        
+                        var dialog = new GenericMessageBoxTemplate();
                         var model = dialog.DataContext as GenericMessageBoxViewModel;
                         model.TitleName = MessageBoxTitles.Warning.ToString();
                         model.MessageContent = $"Code is already Generated or Lock is in Open State. Please confirm if you want to generate Code again";
@@ -66,7 +66,7 @@ namespace FiksLockControl.Views
                         if (Convert.ToBoolean(res))
                         {
                             var result = await _viewModel.GenerateCode(obj.VehicleNumber);
-                            
+
                             if (result != null)
                             {
                                 if (!string.IsNullOrWhiteSpace(result.LockCode))

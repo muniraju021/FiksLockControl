@@ -29,14 +29,17 @@ namespace LockServices.Lib.Services
 
         public async Task<string> UpdateLockStatus(string lockPhoneNo, string status)
         {
-            var lstObj = _iCacheService.GetLockInformationByPhoneNo(lockPhoneNo);
+            //var lstObj = _iCacheService.GetLockInformationByPhoneNo(lockPhoneNo);
+            var userInfo = _iCacheService.GetUserCredentials();
+            var lstLocks = await _iFiksApi.GetLockDetails(userInfo.EmailId);
+            var lstObj = lstLocks.Where(i => i.LockPhNo == lockPhoneNo).FirstOrDefault();
             var userDetails = _iCacheService.GetUserCredentials();
             if (lstObj != null)
             {
                 var res = await _iFiksApi.UpdateLockStatus(userDetails.EmailId, lstObj.LockId, status);
                 return res;
             }
-            _logger.Error($"UpdateLockStatus Failed - LockPhNo:{lockPhoneNo};Status:{status}");
+            _logger.Error($"UpdateLockStatus Failed [PhoneNo Not Found] - LockPhNo:{lockPhoneNo};Status:{status}");
             return default(string);
         }
     }

@@ -12,15 +12,15 @@ namespace LockServices.Lib.Services
         Task<bool> Login(string emailId, string password);
 
         Task<List<LockInformationObject>> GetVehiclesTagged(string emailId);
-        
+
         Task<List<LockInformationObject>> GetLockDetailsByEmailId(string emailId);
 
         Task<ApiResponseMessage> GenerateAndGetCode(string emailId, string vehicleNo);
 
-        Task<List<LockStatusDO>> GetLockHistory(string emailId, string vehicleNo);
+        Task<List<LockStatusDO>> GetLockHistory(string emailId, string vehicleNo, string lockId);
 
         Task<string> UpdateLockStatus(string vehicleNo, string status);
-        
+
         void OpenLock(string code, string phoneNo, ref ApiResponseMessage objApiRespMessage);
 
         void ReadAllMessages();

@@ -103,16 +103,15 @@ namespace LockServices.Lib.Services
                         
         }
         
-        public async Task<List<LockStatusDO>> GetLockHistory(string emailId, string vehicleNo)
+        public async Task<List<LockStatusDO>> GetLockHistory(string emailId, string vehicleNo,string lockId)
         {
-            var lst = await _iFiksApi.GetLockHistory(emailId,vehicleNo);
+            var lst = await _iFiksApi.GetLockHistory(emailId,vehicleNo,lockId);
             return lst;
         }
         
         public async Task<string> UpdateLockStatus(string lockPhoneNo, string status)
         {
             var lstObj = _iCacheService.GetLockInformationByPhoneNo(lockPhoneNo);
-
 
             var userDetails = _iCacheService.GetUserCredentials();
             if(lstObj != null)

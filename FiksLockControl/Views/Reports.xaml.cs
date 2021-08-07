@@ -60,7 +60,7 @@ namespace FiksLockControl.Views
                 workBook.Worksheets[0].UsedRange.AutofitColumns();
                 workBook.Worksheets[0].UsedRange.AutofitRows();
 
-                workBook.Worksheets[0].Range["A1"].Text = "VehicleNo: " + _reportViewModel.SelectedVehNo;
+                workBook.Worksheets[0].Range["A1"].Text = "VehicleNo: " + _reportViewModel.SelectedVehNo.VehicleNumber;
                 workBook.Worksheets[0].Range["A1:B1"].Merge();
                 workBook.Worksheets[0].Range["A1"].HorizontalAlignment = ExcelHAlign.HAlignCenter;
 

@@ -75,8 +75,7 @@ namespace LockServices.Lib.WebClientApi
 
                 //_logger.Info($"FiksApiClient: GetLockDetails - emailId:{emailId} - Result:{message}");
                 _logger.Info($"FiksApiClient: GetLockDetails - emailId:{emailId} - Result:Retreived");
-
-
+                
                 var obj = JsonConvert.DeserializeObject<List<LockInformationObject>>(message, new JsonSerializerSettings { DateFormatString = "dd-MM-yyyy HH:mm:ss" });
                 return obj;
             }
@@ -137,26 +136,26 @@ namespace LockServices.Lib.WebClientApi
 
         }
 
-        public async Task<List<LockStatusDO>> GetLockHistory(string emailId, string vehicleNo)
+        public async Task<List<LockStatusDO>> GetLockHistory(string emailId, string vehicleNo,string lockId)
         {
             _logger.InfoFormat($"FiksApiClient: GetLockHistory - emailId:{emailId} - vehicleNo:{vehicleNo}");
-
+            
             if (string.IsNullOrWhiteSpace(_cachService.GetSessionToken()))
             {
                 _logger.Error($"FiksApiClient: GetLockDetails - Session Expired");
                 throw new Exception("Session Expired");
             }
             _httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", _cachService.GetSessionToken());
-            var response = await _httpClient.GetAsync($@"api/v1/{emailId}/{vehicleNo}/getDashboardHistory");
+            var response = await _httpClient.GetAsync($@"api/v1/{emailId}/{vehicleNo}/{lockId}/getDashboardHistory");
             if (response.IsSuccessStatusCode)
             {
                 var jObject = await response.Content.ReadAsAsync<JObject>();
-                var message = jObject.SelectToken("$..overallStatus", true)?.ToString();
+                var message = jObject.SelectToken("$..message", true)?.ToString();
 
                 _logger.Info($"FiksApiClient: GetLockHistory - emailId:{emailId} - vehicleNo:{vehicleNo} - Result:{message.ToList().Count}");
 
-                var obj = JsonConvert.DeserializeObject<List<LockStatusDO>>(message, new JsonSerializerSettings { DateFormatString = "dd-MM-yyyy HH:mm:ss" });
-                return obj;
+                var obj = JsonConvert.DeserializeObject<List<List<LockStatusDO>>>(message, new JsonSerializerSettings { DateFormatString = "dd-MM-yyyy HH:mm:ss" });
+                return obj.FirstOrDefault();
             }
 
             var error = await response.Content.ReadAsAsync<JObject>();

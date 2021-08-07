@@ -49,8 +49,8 @@ namespace FiksLockControl.Model
             }
         }
 
-        private ObservableCollection<string> _lstVehicleNo;
-        public ObservableCollection<string> LstVehicleNo
+        private ObservableCollection<LockInformationObject> _lstVehicleNo;
+        public ObservableCollection<LockInformationObject> LstVehicleNo
         {
             get { return _lstVehicleNo; }
             set
@@ -60,16 +60,16 @@ namespace FiksLockControl.Model
             }
         }
 
-        public string SelectedVehNo { get; set; }
+        public LockInformationObject SelectedVehNo { get; set; }
 
         public async void GetLockHistory()
         {
             IsBusyIndicator = true;
             try
             {
-                if (!string.IsNullOrWhiteSpace(SelectedVehNo))
+                if (SelectedVehNo != null)
                 {
-                    var lockStatusHistory = await _lockActionServices.GetLockHistory(UserEmail, SelectedVehNo);
+                    var lockStatusHistory = await _lockActionServices.GetLockHistory(UserEmail, SelectedVehNo.VehicleNumber,SelectedVehNo.LockId);
 
                     if (lockStatusHistory != null && lockStatusHistory.Count > 0)
                     {
@@ -111,14 +111,14 @@ namespace FiksLockControl.Model
                 if (userInfo != null)
                 {
                     var lstLockInfo = await _lockActionServices.GetVehiclesTagged(userInfo.EmailId);
-                    var lstVehicles = lstLockInfo.Select(i => i.VehicleNumber).ToList();
+                    //var lstVehicles = lstLockInfo.Select(i => i.VehicleNumber).ToList();
 
-                    var lstVehicleNo = new ObservableCollection<string>();
-                    foreach (var item in lstVehicles)
+                    var lstVehicles = new ObservableCollection<LockInformationObject>();
+                    foreach (var item in lstLockInfo)
                     {
-                        lstVehicleNo.Add(item);
+                        lstVehicles.Add(item);
                     }
-                    LstVehicleNo = lstVehicleNo;
+                    LstVehicleNo = lstVehicles;
                 }
             }
             catch (Exception ex)

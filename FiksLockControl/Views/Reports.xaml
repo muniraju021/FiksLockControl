@@ -70,7 +70,7 @@
                 <StackPanel Background="#FFFFFF" Orientation="Horizontal" Margin="10,0,0,0">
                     <!--TextBlock Style="{StaticResource MessageTextBlockStyle}" Margin="10" FontSize="18" VerticalAlignment="Center">Vehicle No:</TextBlock>-->
                     <ComboBox Margin="15 0 0 0"  Width="200" Height="40" FontFamily="Champagne &amp; Limousines" Foreground="Black" FontSize="18"
-                                  ItemsSource="{Binding LstVehicleNo}" Style="{StaticResource MaterialDesignComboBox}"
+                                  ItemsSource="{Binding LstVehicleNo}" DisplayMemberPath="VehicleNumber" Style="{StaticResource MaterialDesignComboBox}"
                                    materialDesign:HintAssist.Hint="Vehicle No" IsEditable="True"
                                   SelectedItem="{Binding SelectedVehNo, Mode=TwoWay}">
                     </ComboBox>
