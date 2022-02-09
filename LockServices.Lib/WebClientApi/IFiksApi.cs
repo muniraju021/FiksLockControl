@@ -19,7 +19,7 @@ namespace LockServices.Lib.WebClientApi
 
         Task<List<LockStatusDO>> GetLockHistory(string emailId, string vehicleNo,string lockId);
 
-        Task<string> UpdateLockStatus(string emailId, string lockId, string status);
+        Task<string> UpdateLockStatus(string emailId, string lockId, string lockPhoneNo, string status);
 
         Task<string> GetAppVersion();
 

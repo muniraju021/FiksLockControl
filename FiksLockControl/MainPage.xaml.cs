@@ -52,6 +52,8 @@ namespace FiksLockControl
             switch (((ListViewItem)((ListView)sender).SelectedItem).Name)
             {
                 case "Dashboard":
+                    var obj = _applicationViewModel.Kernel.Get<IApiService>();
+                    obj.UpdateLockStatus("9886619232", "OPEN");
                     _dashboardViewModel = new DashboardViewModel(_applicationViewModel.Kernel.Get<ILockActionServices>(), _applicationViewModel.Kernel.Get<ICacheService>(), _applicationViewModel.Kernel.Get<ILog>());
                     contentCtrl.DataContext = _dashboardViewModel;
                     //DataContext = _dashboardViewModel;

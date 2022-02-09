@@ -89,7 +89,7 @@ namespace FiksLockControl.Model
                 _updateProcessStarted = true;
                 Task.Factory.StartNew(async () =>
                 {
-                    while (_updateProcessStarted)
+                    //while (_updateProcessStarted)
                     {
                         var userInfo = _cacheService.GetUserCredentials();
                         if (userInfo != null)
@@ -107,7 +107,7 @@ namespace FiksLockControl.Model
                                 RowCount = Convert.ToString(Math.Ceiling(LstLockModels.Count / ColumnCount));
                             }
                         }
-                        Thread.Sleep(10000);
+                        //Thread.Sleep(10000);
                     }
                     _logger.Warn("DashboardViewModel: Long Running Update Thread Ended.");
                     _updateProcessStarted = true;

@@ -22,7 +22,7 @@ namespace LockServices.Lib.WebClientApi
         private static string FiksBaseAddress = ConfigurationManager.AppSettings["FiksBaseAddress"];
         private readonly ICacheService _cachService;
 
-        public FiksApiClient(ILog logger,ICacheService cacheService)
+        public FiksApiClient(ILog logger, ICacheService cacheService)
         {
             _logger = logger;
             _httpClient = new HttpClient();
@@ -56,7 +56,7 @@ namespace LockServices.Lib.WebClientApi
                 _logger.Error($"FiksApiClient: GetCodeApi - emailId:{emailId} - vehicleNo:{vehicleNo} - Error:{errorMessage}");
                 return errorMessage;
             }
-            
+
         }
 
         public async Task<List<LockInformationObject>> GetLockDetails(string emailId)
@@ -68,14 +68,14 @@ namespace LockServices.Lib.WebClientApi
             }
             _httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", _cachService.GetSessionToken());
             var response = await _httpClient.GetAsync($@"api/v1/{emailId}/getDashboardScreenValues");
-            if(response.IsSuccessStatusCode)
+            if (response.IsSuccessStatusCode)
             {
                 var jObject = await response.Content.ReadAsAsync<JObject>();
-                var message = jObject.SelectToken("message",true).ToString();
+                var message = jObject.SelectToken("message", true).ToString();
 
                 //_logger.Info($"FiksApiClient: GetLockDetails - emailId:{emailId} - Result:{message}");
                 _logger.Info($"FiksApiClient: GetLockDetails - emailId:{emailId} - Result:Retreived");
-                
+
                 var obj = JsonConvert.DeserializeObject<List<LockInformationObject>>(message, new JsonSerializerSettings { DateFormatString = "dd-MM-yyyy HH:mm:ss" });
                 return obj;
             }
@@ -122,7 +122,7 @@ namespace LockServices.Lib.WebClientApi
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
 
             var response = await _httpClient.PostAsync(@"login", stringContent);
-            if(response.IsSuccessStatusCode)
+            if (response.IsSuccessStatusCode)
             {
                 var result = await response.Content.ReadAsStringAsync();
                 var userInfoObj = JsonConvert.DeserializeObject<UserInfo>(result);
@@ -131,15 +131,15 @@ namespace LockServices.Lib.WebClientApi
             }
 
             _logger.Error($"FiksApiClient: LoginApi - emailId:{emailId} - error:{response}");
-            
+
             return default(UserInfo);
 
         }
 
-        public async Task<List<LockStatusDO>> GetLockHistory(string emailId, string vehicleNo,string lockId)
+        public async Task<List<LockStatusDO>> GetLockHistory(string emailId, string vehicleNo, string lockId)
         {
             _logger.InfoFormat($"FiksApiClient: GetLockHistory - emailId:{emailId} - vehicleNo:{vehicleNo}");
-            
+
             if (string.IsNullOrWhiteSpace(_cachService.GetSessionToken()))
             {
                 _logger.Error($"FiksApiClient: GetLockDetails - Session Expired");
@@ -163,33 +163,46 @@ namespace LockServices.Lib.WebClientApi
             return default(List<LockStatusDO>);
         }
 
-        public async Task<string> UpdateLockStatus(string emailId, string lockId, string status)
+        public async Task<string> UpdateLockStatus(string emailId, string lockId, string lockPhoneNo, string status)
         {
-            _logger.InfoFormat($"FiksApiClient: UpdateLockStatus - emailId:{emailId} - lockId:{lockId} - status:{status}");
+            _logger.InfoFormat($"FiksApiClient: UpdateLockStatus - emailId:{emailId} - lockId:{lockId} - lockPhoneNo:{lockPhoneNo} - status:{status}");
 
             if (string.IsNullOrWhiteSpace(_cachService.GetSessionToken()))
             {
                 _logger.Error($"FiksApiClient: UpdateLockStatus - Session Expired");
                 throw new Exception("Session Expired");
             }
-            
+
             _httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", _cachService.GetSessionToken());
 
-            var json = JsonConvert.SerializeObject(new
+            var jsonArray = new
             {
-                lockId = lockId,
-                message = status
-            });
+                readSmsList = new[]
+                {
+                    new {
+                        lockPhoneNumber = lockPhoneNo,
+                        message = status
+                    }
+                }
+            };
+
+            //var json = JsonConvert.SerializeObject(new
+            //{
+            //    lockPhoneNumber = lockPhoneNo,
+            //    message = status
+            //});
+            var json = JsonConvert.SerializeObject(jsonArray);
             var stringContent = new StringContent(json, UnicodeEncoding.UTF8, "application/json");
 
-            var response = await _httpClient.PostAsync($@"api/v1/updateDashBoardByReadingSms/{emailId}", stringContent);
+            //var response = await _httpClient.PostAsync($@"api/v1/updateDashBoardByReadingSms/{emailId}", stringContent);
+            var response = await _httpClient.PostAsync($@"api/v1/updateDashBoardByReadingSms", stringContent);
             if (response.IsSuccessStatusCode)
             {
                 var jObject = await response.Content.ReadAsAsync<JObject>();
                 var message = jObject.SelectToken("$.message", true).ToString();
 
                 _logger.InfoFormat($"FiksApiClient: UpdateLockStatus - emailId:{emailId} - lockId:{lockId} - status:{status} - Result:{message}");
-                
+
                 return message;
             }
 
@@ -218,14 +231,14 @@ namespace LockServices.Lib.WebClientApi
                 var message = jObject.SelectToken("message", true).ToString();
 
                 _logger.Info($"FiksApiClient: GetAppVersion - Result:{message}");
-                               
+
                 return message;
             }
-                      
+
             return default(string);
         }
 
-        public async Task DownloadLatestAppVersion(string version,string downloadPath)
+        public async Task DownloadLatestAppVersion(string version, string downloadPath)
         {
             _logger.InfoFormat($"FiksApiClient: DownloadLatestAppVersion Started");
 

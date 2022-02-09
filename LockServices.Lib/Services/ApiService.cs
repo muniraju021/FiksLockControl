@@ -36,7 +36,7 @@ namespace LockServices.Lib.Services
             var userDetails = _iCacheService.GetUserCredentials();
             if (lstObj != null)
             {
-                var res = await _iFiksApi.UpdateLockStatus(userDetails.EmailId, lstObj.LockId, status);
+                var res = await _iFiksApi.UpdateLockStatus(userDetails.EmailId, lstObj?.LockId, lockPhoneNo, status);
                 return res;
             }
             _logger.Error($"UpdateLockStatus Failed [PhoneNo Not Found] - LockPhNo:{lockPhoneNo};Status:{status}");
