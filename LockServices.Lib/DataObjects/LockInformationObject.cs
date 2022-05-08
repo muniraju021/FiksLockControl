@@ -63,6 +63,9 @@ namespace LockServices.Lib.DataObjects
         [JsonProperty("lockStatus")]
         public string LockStatus { get; set; }
 
+        [JsonProperty("lastUpdate")]
+        public DateTime? LastUpdate { get; set; }
+
         public string LatestLockCode
         {
             get
@@ -93,10 +96,15 @@ namespace LockServices.Lib.DataObjects
         {
             get
             {
-                if (LatestLastUpdatedTime != null && LatestLastUpdatedTime.Contains("LOCK_OPEN"))
+                //if (LatestLastUpdatedTime != null && LatestLastUpdatedTime.Contains("LOCK_OPEN"))
+                //    return "LockOpen";
+                //else
+                //    return "Lock";
+                if (LockStatus != null && LockStatus.Contains("OPEN"))
                     return "LockOpen";
                 else
                     return "Lock";
+               
             }
         }
 
@@ -115,12 +123,15 @@ namespace LockServices.Lib.DataObjects
         {
             get
             {
-                if (OverallStatus != null && OverallStatus.Count > 0 && OverallStatus[0].LastUpdatedTime != null)
-                    return OverallStatus[0].LastUpdatedTime?.ToString("dd-MM-yyyy HH:mm:ss");
-                else
-                    return string.Empty;
+                //if (OverallStatus != null && OverallStatus.Count > 0 && OverallStatus[0].LastUpdatedTime != null)
+                //    return OverallStatus[0].LastUpdatedTime?.ToString("dd-MM-yyyy HH:mm:ss");
+                //else
+                //    return string.Empty;
+                return LastUpdate?.ToString("dd-MM-yyyy HH:mm:ss");
             }
         }
+
+       
 
         public DialogHostType DialogHostTypeInstance; 
     }

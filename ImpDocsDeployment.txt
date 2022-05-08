@@ -1,5 +1,6 @@
+Change the version in the AssemblyInfo.cs file
 npm command
-Squirrel --releasify AuximoLock.1.0.4.nupkg
+Squirrel --releasify TransportLocks.1.0.19.nupkg
 
 https://www.youtube.com/watch?v=W8Qu4qMJyh4
 

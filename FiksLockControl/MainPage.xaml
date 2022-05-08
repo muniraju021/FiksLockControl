@@ -14,7 +14,8 @@
         Icon="Images/logo.ico"
         ResizeMode="NoResize" WindowStartupLocation="CenterScreen" WindowStyle="None"
         DataContext="{Binding Path=ObjApplicationViewModel, Source={StaticResource ServiceLocator}}"
-        Title="Transport Locks" Height="700" Width="1090" >
+        Title="Transport Locks" Height="700" Width="1090"
+        MouseMove="Window_MouseMove">
 
     <Window.Resources>
         <Storyboard x:Key="OpenMenu">
@@ -119,6 +120,10 @@
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Grid.Column="1">
                             <TextBlock Margin="0 0 10 10" Style="{StaticResource VersionTextBlockStyle}" Text="{Binding CurrentVersion}" VerticalAlignment="Bottom"></TextBlock>
+                            <Button x:Name="btnMinimize" Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}" Width="25" Height="25" Background="{x:Null}" BorderBrush="{x:Null}" 
+                                    Foreground="White" Click="btnMinimize_Click" Tag="Minimize" >
+                                <materialDesign:PackIcon Kind="Minus" Width="20" Height="20"/>
+                            </Button>
                             <Button x:Name="btnExit" Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}" Width="25" Height="25" Background="{x:Null}" BorderBrush="{x:Null}" 
                                     Foreground="White" Click="btnExit_Click" >
                                 <materialDesign:PackIcon Kind="Power" Width="20" Height="20"/>
@@ -129,7 +134,7 @@
                                     <Button Content="Account"/>
                                     <Button Content="Help"/>
                                     <Separator/>
-                                    <Button Content="Logout"/>
+                                    <Button Content="Logout" Click="btnExit_Click"/>
                                 </StackPanel>
                             </materialDesign:PopupBox>
                         </StackPanel>
@@ -164,7 +169,7 @@
                             <ListViewItem x:Name="GetCodes" Height="80">
                                 <StackPanel Orientation="Horizontal">
                                     <materialDesign:PackIcon Kind="Codepen" Height="25" Width="25" Margin="10" Foreground="Black"/>
-                                    <TextBlock Text="Get Codes" VerticalAlignment="Center" Margin="20 10" FontSize="20" Foreground="Black"/>
+                                    <TextBlock Text="Generate OTP" VerticalAlignment="Center" Margin="20 10" FontSize="20" Foreground="Black"/>
                                 </StackPanel>
                             </ListViewItem>
                             <ListViewItem Height="80" x:Name="Reports">
