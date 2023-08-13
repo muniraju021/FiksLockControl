@@ -72,7 +72,7 @@ namespace LockServices.Lib.DataObjects
             {
                 if (CodeList != null && CodeList.Count > 0)
                 {
-                    return CodeList[0].Code;
+                    return CodeList[0]?.Code;
                 }
                 return string.Empty;
             }

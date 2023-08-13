@@ -195,7 +195,8 @@ namespace LockServices.Lib.WebClientApi
             var stringContent = new StringContent(json, UnicodeEncoding.UTF8, "application/json");
 
             //var response = await _httpClient.PostAsync($@"api/v1/updateDashBoardByReadingSms/{emailId}", stringContent);
-            var response = await _httpClient.PostAsync($@"api/v1/updateDashBoardByReadingSms", stringContent);
+            //var response = await _httpClient.PostAsync($@"api/v1/updateDashBoardByReadingSms", stringContent);
+            var response = await _httpClient.PostAsync($@"api/v1/updateDashBoardByReadingSmsList", stringContent);
             if (response.IsSuccessStatusCode)
             {
                 var jObject = await response.Content.ReadAsAsync<JObject>();

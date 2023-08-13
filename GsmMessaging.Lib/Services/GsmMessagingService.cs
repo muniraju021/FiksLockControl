@@ -2,6 +2,7 @@
 using SerialPortComLib.Services;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,6 +13,7 @@ namespace GsmMessaging.Lib.Services
     {
         private readonly ISerialPortService _serialPortService;
         private readonly ILog _logger;
+        private readonly string serialComPort = ConfigurationManager.AppSettings["SerialComPort"];
 
         public GsmMessagingService(ISerialPortService serialPortService,ILog logger)
         {
@@ -25,11 +27,14 @@ namespace GsmMessaging.Lib.Services
             {
                 var lstPorts = _serialPortService.GetSerialComPorts();
                 _logger.InfoFormat($"GsmMessagingService: InitializeSerialConnection - Serial Ports Active - {string.Join(",", lstPorts)}");
-                if (lstPorts != null)
+                if (lstPorts != null && lstPorts.Count > 0)
                 {
-                    _serialPortService.InitializeSerialPortComm(lstPorts[0],callBackOnDataReceived:processMsgReceiver);
-                    _logger.InfoFormat($"GsmMessagingService: InitializeSerialConnection - Complete on port No - {lstPorts[0]}");
+                    var comPort = !string.IsNullOrWhiteSpace(serialComPort) ? serialComPort : lstPorts[0];
+                    _serialPortService.InitializeSerialPortComm(comPort, callBackOnDataReceived: processMsgReceiver);
+                    _logger.InfoFormat($"GsmMessagingService: InitializeSerialConnection - Complete on port No - {comPort}");
                 }
+                else
+                    throw new Exception("No Serial Ports Exists");
             }
             catch (Exception ex)
             {
