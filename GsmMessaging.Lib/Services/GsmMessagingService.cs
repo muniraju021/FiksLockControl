@@ -14,24 +14,32 @@ namespace GsmMessaging.Lib.Services
         private readonly ISerialPortService _serialPortService;
         private readonly ILog _logger;
         private readonly string serialComPort = ConfigurationManager.AppSettings["SerialComPort"];
+        private readonly bool useDynamicPort = false;
 
-        public GsmMessagingService(ISerialPortService serialPortService,ILog logger)
+        public GsmMessagingService(ISerialPortService serialPortService, ILog logger)
         {
             _serialPortService = serialPortService;
             _logger = logger;
+            useDynamicPort = ConfigurationManager.AppSettings["UseDynamicPort"] != null ? Convert.ToBoolean(ConfigurationManager.AppSettings["UseDynamicPort"]) : false;
         }
 
         public void InitializeSerialConnection(Action<string> processMsgReceiver = null)
         {
             try
             {
-                var lstPorts = _serialPortService.GetSerialComPorts();
-                _logger.InfoFormat($"GsmMessagingService: InitializeSerialConnection - Serial Ports Active - {string.Join(",", lstPorts)}");
-                if (lstPorts != null && lstPorts.Count > 0)
+                var lstPorts = new List<string>();
+                var comPortVal = serialComPort;
+                if (useDynamicPort)
                 {
-                    var comPort = !string.IsNullOrWhiteSpace(serialComPort) ? serialComPort : lstPorts[0];
-                    _serialPortService.InitializeSerialPortComm(comPort, callBackOnDataReceived: processMsgReceiver);
-                    _logger.InfoFormat($"GsmMessagingService: InitializeSerialConnection - Complete on port No - {comPort}");
+                    lstPorts = _serialPortService.GetSerialComPorts();
+                    _logger.InfoFormat($"GsmMessagingService: InitializeSerialConnection - Serial Ports Active - {string.Join(",", lstPorts)}");
+                    comPortVal = lstPorts?.Count > 0 ? lstPorts[0] : serialComPort;
+                }
+                if (!string.IsNullOrWhiteSpace(comPortVal))
+                {
+                    _logger.InfoFormat($"GsmMessagingService: InitializeSerialConnection - on Port - {comPortVal}");
+                    _serialPortService.InitializeSerialPortComm(comPortVal, callBackOnDataReceived: processMsgReceiver);
+                    _logger.InfoFormat($"GsmMessagingService: InitializeSerialConnection - Complete on port No - {comPortVal}");
                 }
                 else
                     throw new Exception("No Serial Ports Exists");
@@ -40,7 +48,7 @@ namespace GsmMessaging.Lib.Services
             {
                 _logger.Error($"GsmMessagingService: InitializeSerialConnection - Error in Initializing Serial Comm - Exception:{ex}");
             }
-            
+
         }
 
         public bool SendMessage(string message)
@@ -51,7 +59,7 @@ namespace GsmMessaging.Lib.Services
 
         public bool IsSmsConnectionActive()
         {
-            if(_serialPortService != null)
+            if (_serialPortService != null)
                 return _serialPortService.IsSerialPortConnectionActive();
             return false;
         }
